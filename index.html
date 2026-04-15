@@ -1950,6 +1950,14 @@
 
           // Show toggle
           document.getElementById("lang-toggle").classList.add("visible");
+
+          // Start music (language click is a user gesture — autoplay allowed)
+          const audio = document.getElementById("bg-audio");
+          const musicBtn = document.getElementById("music-toggle");
+          audio.muted = false;
+          musicBtn.classList.remove("muted");
+          musicBtn.setAttribute("aria-label", "Silenzia musica");
+          audio.play().catch(() => {});
         };
 
         /* ── TOGGLE LANGUAGE ─────────────────────── */
