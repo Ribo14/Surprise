@@ -458,6 +458,32 @@
         opacity: 0.85;
       }
 
+      /* FAMILY PHOTO */
+      .family-photo-wrap {
+        margin: 0 auto 3rem;
+        max-width: min(480px, 90vw);
+        position: relative;
+        z-index: 1;
+      }
+      .family-photo-wrap img {
+        width: 100%;
+        border-radius: 20px;
+        border: 2px solid rgba(201, 150, 42, 0.35);
+        box-shadow:
+          0 8px 40px rgba(0, 0, 0, 0.4),
+          0 0 0 6px rgba(201, 150, 42, 0.08);
+        display: block;
+      }
+      .family-photo-caption {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+        color: rgba(253, 246, 236, 0.5);
+        letter-spacing: 0.08em;
+        margin-top: 0.9rem;
+        text-align: center;
+      }
+
       /* CLOSING */
       #closing {
         background: linear-gradient(
@@ -886,12 +912,18 @@
 
     <section id="closing">
       <div class="closing-inner">
-        <p class="closing-quote sr">
+        <div class="family-photo-wrap sr">
+          <img src="./famiglia.jpg" alt="Noi tre insieme" />
+          <p class="family-photo-caption">
+            Con tutto il nostro amore &#128149;
+          </p>
+        </div>
+        <p class="closing-quote sr sr-delay-1">
           Da scegliere insieme,<br />quando il cuore ti dir&#224; il momento
           giusto.
         </p>
-        <div class="closing-divider sr sr-delay-1" aria-hidden="true"></div>
-        <span class="closing-signature sr sr-delay-2"
+        <div class="closing-divider sr sr-delay-2" aria-hidden="true"></div>
+        <span class="closing-signature sr sr-delay-3"
           >Con amore, Laurent &amp; Dominique &#128155;</span
         >
         <a
