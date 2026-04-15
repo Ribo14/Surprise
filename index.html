@@ -1950,14 +1950,6 @@
 
           // Show toggle
           document.getElementById("lang-toggle").classList.add("visible");
-
-          // Start music (language click is a user gesture — autoplay allowed)
-          const audio = document.getElementById("bg-audio");
-          const musicBtn = document.getElementById("music-toggle");
-          audio.muted = false;
-          musicBtn.classList.remove("muted");
-          musicBtn.setAttribute("aria-label", "Silenzia musica");
-          audio.play().catch(() => {});
         };
 
         /* ── TOGGLE LANGUAGE ─────────────────────── */
@@ -2259,10 +2251,20 @@
           const btn = document.getElementById("music-toggle");
           const wrap = document.getElementById("music-player");
           audio.volume = 0.4;
-          audio.muted = true;
-          // Attempt autoplay; show player regardless
-          audio.play().catch(() => {});
+          audio.muted = false;
           wrap.classList.add("visible");
+          btn.classList.remove("muted");
+          btn.setAttribute("aria-label", "Silenzia musica");
+
+          // Start music on the very first interaction (while lang-gate is visible)
+          document.addEventListener(
+            "pointerdown",
+            function onFirstInteraction() {
+              audio.play().catch(() => {});
+              document.removeEventListener("pointerdown", onFirstInteraction);
+            },
+            { once: true },
+          );
 
           window.toggleMusic = function () {
             audio.muted = !audio.muted;
