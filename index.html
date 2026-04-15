@@ -1403,14 +1403,7 @@
 
     <!-- Music player -->
     <div id="music-player" aria-label="Lettore musicale">
-      <audio
-        id="bg-audio"
-        src="./music.mp3"
-        loop
-        preload="auto"
-        autoplay
-        muted
-      ></audio>
+      <audio id="bg-audio" src="./music.mp3" loop preload="auto"></audio>
       <button
         id="music-toggle"
         class="muted"
@@ -2031,14 +2024,15 @@
           // Show toggle
           document.getElementById("lang-toggle").classList.add("visible");
 
-          // Unmute music — user just clicked, so browser allows it.
+          // Start music — this is inside a user gesture (click) so browsers allow it.
           const audio = document.getElementById("bg-audio");
           const btn = document.getElementById("music-toggle");
-          if (audio) {
+          if (audio && audio.paused) {
             audio.muted = false;
-            if (audio.paused) audio.play().catch(() => {});
-            btn.classList.remove("muted");
-            btn.setAttribute("aria-label", "Silenzia musica");
+            audio.play().catch(() => {
+              btn.classList.add("muted");
+              btn.setAttribute("aria-label", "Attiva musica");
+            });
           }
         };
 
@@ -2361,10 +2355,10 @@
           const btn = document.getElementById("music-toggle");
           const wrap = document.getElementById("music-player");
           audio.volume = 0.4;
-          // Audio already playing muted via HTML autoplay attribute.
-          // We just set up the button state to reflect muted status.
-          btn.classList.add("muted");
-          btn.setAttribute("aria-label", "Attiva musica");
+          audio.muted = false;
+          // Button starts in normal (unmuted) state; music plays on first click.
+          btn.classList.remove("muted");
+          btn.setAttribute("aria-label", "Silenzia musica");
           wrap.classList.add("visible");
 
           window.toggleMusic = function () {
