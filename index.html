@@ -1114,10 +1114,7 @@
         position: fixed;
         bottom: 1.4rem;
         left: 1.4rem;
-        z-index: 8000;
-        display: none;
-      }
-      #music-player.visible {
+        z-index: 10001;
         display: block;
       }
       #music-toggle {
@@ -2249,33 +2246,50 @@
         function initMusicPlayer() {
           const audio = document.getElementById("bg-audio");
           const btn = document.getElementById("music-toggle");
-          const wrap = document.getElementById("music-player");
           audio.volume = 0.4;
-          audio.muted = false;
-          wrap.classList.add("visible");
-          btn.classList.remove("muted");
-          btn.setAttribute("aria-label", "Silenzia musica");
 
-          // Start music on the very first interaction (while lang-gate is visible)
-          document.addEventListener(
-            "pointerdown",
-            function onFirstInteraction() {
-              audio.play().catch(() => {});
-              document.removeEventListener("pointerdown", onFirstInteraction);
-            },
-            { once: true },
-          );
+          function startPlaying() {
+            audio.muted = false;
+            btn.classList.remove("muted");
+            btn.setAttribute("aria-label", "Silenzia musica");
+            audio.play().catch(() => {});
+          }
 
-          window.toggleMusic = function () {
-            audio.muted = !audio.muted;
-            if (audio.muted) {
-              btn.classList.add("muted");
-              btn.setAttribute("aria-label", "Attiva musica");
-            } else {
+          // Try immediate autoplay
+          audio
+            .play()
+            .then(() => {
+              // Autoplay allowed
               btn.classList.remove("muted");
               btn.setAttribute("aria-label", "Silenzia musica");
-              // Resume if paused (browsers may have blocked autoplay)
+            })
+            .catch(() => {
+              // Blocked: start on first user interaction
+              btn.classList.add("muted");
+              const unlockEvents = ["click", "touchstart", "keydown"];
+              function onFirstInteraction() {
+                startPlaying();
+                unlockEvents.forEach((ev) =>
+                  document.removeEventListener(ev, onFirstInteraction),
+                );
+              }
+              unlockEvents.forEach((ev) =>
+                document.addEventListener(ev, onFirstInteraction, {
+                  once: true,
+                }),
+              );
+            });
+
+          window.toggleMusic = function () {
+            if (audio.paused || audio.muted) {
+              audio.muted = false;
+              btn.classList.remove("muted");
+              btn.setAttribute("aria-label", "Silenzia musica");
               if (audio.paused) audio.play().catch(() => {});
+            } else {
+              audio.muted = true;
+              btn.classList.add("muted");
+              btn.setAttribute("aria-label", "Attiva musica");
             }
           };
         }
