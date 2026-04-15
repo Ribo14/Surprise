@@ -345,6 +345,7 @@
         font-style: italic;
         font-weight: 300;
         letter-spacing: 0.08em;
+        -webkit-backdrop-filter: blur(12px);
         backdrop-filter: blur(12px);
         cursor: pointer;
         animation: fadeIn 0.9s 0.6s var(--ease-out-expo) both;
@@ -451,6 +452,7 @@
         display: flex;
         align-items: center;
         gap: 0.7rem;
+        -webkit-backdrop-filter: blur(12px);
         backdrop-filter: blur(12px);
         transition:
           background 0.3s,
@@ -532,6 +534,7 @@
         font-family: var(--ff-body);
         font-weight: 400;
         color: var(--text);
+        -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         transition:
@@ -1068,6 +1071,7 @@
         max-width: 680px;
         width: 100%;
         text-align: center;
+        -webkit-backdrop-filter: blur(16px);
         backdrop-filter: blur(16px);
         animation: revealCard 0.9s 0.3s var(--ease-out-expo) both;
         position: relative;
@@ -1253,6 +1257,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         transition:
@@ -1288,6 +1293,67 @@
       }
       #music-toggle:not(.muted) .note-icon {
         animation: noteBounce 1.8s ease-in-out infinite;
+      }
+
+      /* ─────────────────────────────────────────
+       TICKET IFRAME OVERLAY
+    ───────────────────────────────────────── */
+      #ticket-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        background: #1a0810;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.55s var(--ease-smooth),
+          visibility 0.55s;
+      }
+      #ticket-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      #ticket-overlay iframe {
+        flex: 1;
+        width: 100%;
+        border: none;
+        opacity: 0;
+        transition: opacity 0.4s 0.2s var(--ease-smooth);
+      }
+      #ticket-overlay.loaded iframe {
+        opacity: 1;
+      }
+      #ticket-close {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.1rem;
+        background: rgba(253, 246, 236, 0.1);
+        border: 1px solid rgba(201, 150, 42, 0.45);
+        border-radius: 40px;
+        color: rgba(253, 246, 236, 0.8);
+        font-family: var(--ff-body);
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          color 0.2s;
+      }
+      #ticket-close:hover {
+        background: rgba(201, 150, 42, 0.18);
+        border-color: var(--gold);
+        color: var(--cream);
       }
 
       /* ─────────────────────────────────────────
@@ -1509,6 +1575,29 @@
 
     <!-- Confetti canvas -->
     <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+    <!-- ─────────────────────────────────────────
+     TICKET IFRAME OVERLAY
+───────────────────────────────────────── -->
+    <div
+      id="ticket-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Biglietto regalo"
+    >
+      <button
+        id="ticket-close"
+        onclick="closeTicket()"
+        aria-label="Torna al sito"
+      >
+        ← Indietro
+      </button>
+      <iframe
+        id="ticket-frame"
+        title="Biglietto Patricia"
+        src="about:blank"
+      ></iframe>
+    </div>
 
     <!-- ─────────────────────────────────────────
      HERO
@@ -1943,13 +2032,9 @@
           Romantica con terrazza privata, e un Wellness Lunch — tutto dedicato a
           te, da vivere quando il cuore ti dirà il momento giusto.
         </p>
-        <a
-          href="./biglietto_patricia.html"
-          class="reveal-cta"
-          data-i18n="revealCta"
-        >
+        <button onclick="openTicket()" class="reveal-cta" data-i18n="revealCta">
           Scopri tutti i dettagli →
-        </a>
+        </button>
         <span class="reveal-signature" data-i18n="revealSignature"
           >Con tutto il mio amore, Laurent 💛</span
         >
@@ -2160,9 +2245,31 @@
           document.body.style.overflow = "";
         };
 
+        /* ── TICKET IFRAME OVERLAY ───────────────── */
+        window.openTicket = function () {
+          const overlay = document.getElementById("ticket-overlay");
+          const frame = document.getElementById("ticket-frame");
+          // Load iframe only if not already loaded
+          if (frame.src === "about:blank" || frame.src === "") {
+            frame.src = "./biglietto_patricia.html";
+            frame.onload = () => overlay.classList.add("loaded");
+          }
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+        };
+
+        window.closeTicket = function () {
+          const overlay = document.getElementById("ticket-overlay");
+          overlay.classList.remove("active");
+          document.body.style.overflow = "";
+        };
+
         /* Keyboard close */
         document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") closeGiftReveal();
+          if (e.key === "Escape") {
+            closeGiftReveal();
+            closeTicket();
+          }
         });
 
         /* ── CONFETTI ─────────────────────────────── */

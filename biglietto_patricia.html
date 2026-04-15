@@ -1,592 +1,981 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Il tuo regalo · Patricia</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --burgundy: #8B1A2A;
-      --gold:     #C9962A;
-      --blush:    #F2C4CE;
-      --cream:    #FDF6EC;
-      --green:    #7A9E7E;
-      --text:     #3a2a1a;
-      --ff-heading: 'Cormorant Garamond', Georgia, serif;
-      --ff-body:    'Lato', system-ui, sans-serif;
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
-    body {
-      background: var(--cream);
-      color: var(--text);
-      font-family: var(--ff-body);
-      font-weight: 300;
-      overflow-x: hidden;
-      min-height: 100dvh;
-    }
-    img { max-width: 100%; display: block; }
-    a { color: inherit; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(28px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes shimmerText {
-      0%   { background-position: -300% center; }
-      100% { background-position: 300% center; }
-    }
-    @keyframes petalFall {
-      0%   { transform: translateY(-40px) rotate(0deg) scale(1); opacity: 0; }
-      10%  { opacity: 0.8; }
-      90%  { opacity: 0.5; }
-      100% { transform: translateY(110vh) rotate(720deg) scale(0.6); opacity: 0; }
-    }
-    @keyframes scrollBounce {
-      0%,100% { transform: translateX(-50%) translateY(0); }
-      50%     { transform: translateX(-50%) translateY(8px); }
-    }
-
-    /* HERO */
-    #hero {
-      position: relative;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 5rem 1.5rem 4rem;
-      overflow: hidden;
-    }
-    #hero-bg {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, #1a0810 0%, var(--burgundy) 50%, #2d1a08 100%);
-      z-index: 0;
-    }
-    #hero-bg::before {
-      content: '';
-      position: absolute;
-      top: -20%; right: -10%;
-      width: 60vw; height: 60vw;
-      max-width: 500px; max-height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,150,42,0.12) 0%, transparent 70%);
-    }
-    #hero-bg::after {
-      content: '';
-      position: absolute;
-      bottom: -15%; left: -8%;
-      width: 50vw; height: 50vw;
-      max-width: 420px; max-height: 420px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(242,196,206,0.08) 0%, transparent 70%);
-    }
-    #petal-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-    .hero-content { position: relative; z-index: 2; }
-    .hero-eyebrow {
-      font-family: var(--ff-body);
-      font-weight: 300;
-      font-size: clamp(0.72rem, 2vw, 0.88rem);
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: rgba(201,150,42,0.75);
-      animation: fadeIn 0.8s 0.1s var(--ease-out-expo) both;
-    }
-    .hero-name {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(4rem, 15vw, 8rem);
-      line-height: 0.95;
-      color: var(--cream);
-      animation: fadeIn 0.9s 0.3s var(--ease-out-expo) both;
-      margin: 0.3rem 0;
-    }
-    .hero-subtitle {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      background: linear-gradient(120deg, #b87c22, var(--gold), #f0d060, var(--gold), #b87c22);
-      background-size: 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmerText 5s linear infinite, fadeIn 0.9s 0.55s var(--ease-out-expo) both;
-      margin-bottom: 2.5rem;
-    }
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2rem; left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      opacity: 0;
-      animation: fadeIn 1s 1.2s forwards;
-    }
-    .scroll-indicator span {
-      font-family: var(--ff-body);
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(201,150,42,0.65);
-    }
-    .scroll-arrow {
-      width: 22px; height: 22px;
-      border-right: 2px solid rgba(201,150,42,0.6);
-      border-bottom: 2px solid rgba(201,150,42,0.6);
-      transform: rotate(45deg);
-      animation: scrollBounce 1.6s ease-in-out infinite;
-    }
-
-    /* DIVIDERS */
-    .divider-wrap { text-align: center; padding: 0.5rem 1rem; }
-    .botanical-divider { display: block; margin: 0 auto; max-width: min(600px, 90vw); overflow: visible; }
-
-    /* SECTIONS */
-    section { padding: 5rem 1.5rem; }
-    .section-inner { max-width: 780px; margin: 0 auto; }
-    .section-label {
-      font-family: var(--ff-body);
-      font-weight: 300;
-      font-size: 0.78rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.8rem;
-      display: block;
-    }
-
-    /* SCROLL REVEAL */
-    .sr {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.75s var(--ease-out-expo), transform 0.75s var(--ease-out-expo);
-    }
-    .sr.visible { opacity: 1; transform: translateY(0); }
-    .sr-delay-1 { transition-delay: 0.12s; }
-    .sr-delay-2 { transition-delay: 0.26s; }
-    .sr-delay-3 { transition-delay: 0.42s; }
-
-    /* MESSAGE */
-    #message { background: linear-gradient(160deg, #fff8f0 0%, var(--cream) 100%); }
-    .message-card {
-      background: #fff;
-      border: 1px solid rgba(201,150,42,0.3);
-      border-radius: 20px;
-      padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 3rem);
-      box-shadow: 0 8px 48px rgba(139,26,42,0.07), 0 2px 8px rgba(201,150,42,0.08);
-      position: relative;
-      overflow: hidden;
-    }
-    .message-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--burgundy), var(--gold), var(--blush));
-    }
-    .message-card::after {
-      content: '"';
-      position: absolute;
-      top: -0.2rem; left: 1rem;
-      font-family: var(--ff-heading);
-      font-size: 8rem;
-      color: rgba(201,150,42,0.07);
-      line-height: 1;
-      pointer-events: none;
-    }
-    .message-ornament { text-align: center; margin-bottom: 1.5rem; font-size: 1.2rem; opacity: 0.5; letter-spacing: 0.5em; }
-    .message-text {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-size: clamp(1.1rem, 2.8vw, 1.35rem);
-      line-height: 1.9;
-      color: var(--text);
-      position: relative;
-      z-index: 1;
-    }
-    .message-signature {
-      margin-top: 2rem;
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      display: block;
-      text-align: right;
-      background: linear-gradient(120deg, #b87c22, var(--gold), #f0d060, var(--gold), #b87c22);
-      background-size: 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmerText 5s linear infinite;
-    }
-
-    /* DESTINATION */
-    #destination { background: linear-gradient(170deg, #fdf1f5 0%, #f5f9f5 50%, #fdf6ec 100%); }
-    .destination-heading {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(2rem, 6vw, 3.2rem);
-      color: var(--burgundy);
-      text-align: center;
-      line-height: 1.1;
-      margin-bottom: 0.3rem;
-    }
-    .destination-sub {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
-      color: var(--gold);
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-    @media (min-width: 640px) {
-      .details-grid { grid-template-columns: 1fr 1fr; }
-      .details-grid .detail-card:last-child:nth-child(odd) {
-        grid-column: 1 / -1;
-        max-width: 500px;
-        margin: 0 auto;
-        width: 100%;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Il tuo regalo · Patricia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --burgundy: #8b1a2a;
+        --gold: #c9962a;
+        --blush: #f2c4ce;
+        --cream: #fdf6ec;
+        --green: #7a9e7e;
+        --text: #3a2a1a;
+        --ff-heading: "Cormorant Garamond", Georgia, serif;
+        --ff-body: "Lato", system-ui, sans-serif;
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       }
-    }
-    .detail-card {
-      background: #fff;
-      border: 1px solid rgba(201,150,42,0.2);
-      border-radius: 16px;
-      padding: clamp(1.5rem, 4vw, 2.2rem);
-      box-shadow: 0 4px 24px rgba(139,26,42,0.05);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.25s var(--ease-out-expo), box-shadow 0.25s;
-    }
-    .detail-card:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(139,26,42,0.1); }
-    .detail-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--burgundy), var(--gold));
-      opacity: 0.7;
-    }
-    .detail-icon { font-size: 1.6rem; margin-bottom: 0.8rem; display: block; }
-    .detail-label {
-      font-family: var(--ff-body);
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-    .detail-title {
-      font-family: var(--ff-heading);
-      font-size: clamp(1.15rem, 3vw, 1.4rem);
-      font-weight: 600;
-      color: var(--burgundy);
-      margin-bottom: 0.7rem;
-    }
-    .detail-text {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-size: clamp(0.95rem, 2.2vw, 1.08rem);
-      line-height: 1.85;
-      color: var(--text);
-      opacity: 0.85;
-    }
-
-    /* CLOSING */
-    #closing {
-      background: linear-gradient(160deg, #1a0810 0%, var(--burgundy) 50%, #2d1a08 100%);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    #closing::before {
-      content: '';
-      position: absolute;
-      top: -20%; left: 50%;
-      transform: translateX(-50%);
-      width: 70vw; height: 70vw;
-      max-width: 600px; max-height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,150,42,0.1) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .closing-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
-    .closing-quote {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(1.2rem, 3.5vw, 1.7rem);
-      color: rgba(253,246,236,0.85);
-      line-height: 1.75;
-      margin-bottom: 2.5rem;
-    }
-    .closing-divider {
-      width: 60px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 0 auto 2rem;
-    }
-    .closing-signature {
-      font-family: var(--ff-heading);
-      font-style: italic;
-      font-size: clamp(1.15rem, 3.2vw, 1.5rem);
-      background: linear-gradient(120deg, #b87c22, var(--gold), #f5e070, var(--gold), #b87c22);
-      background-size: 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmerText 4s linear infinite;
-      display: block;
-      margin-bottom: 2.5rem;
-    }
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.8rem;
-      background: transparent;
-      border: 1.5px solid rgba(201,150,42,0.5);
-      border-radius: 40px;
-      color: rgba(253,246,236,0.75);
-      font-family: var(--ff-body);
-      font-size: 0.82rem;
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.2s;
-    }
-    .back-btn:hover {
-      background: rgba(201,150,42,0.15);
-      border-color: var(--gold);
-      color: var(--cream);
-      transform: translateY(-2px);
-    }
-
-    /* FOOTER */
-    footer {
-      background: #150810;
-      padding: 2rem 1.5rem;
-      text-align: center;
-    }
-    .footer-logo {
-      width: 110px;
-      margin: 0 auto 1rem;
-      opacity: 0.7;
-      filter: brightness(0) invert(1);
-    }
-    .footer-text {
-      font-family: var(--ff-body);
-      font-weight: 300;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      color: rgba(253,246,236,0.35);
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 480px) { section { padding: 3.5rem 1.2rem; } }
-    @media (min-width: 768px) { section { padding: 6rem 2.5rem; } }
-    @media (min-width: 1280px) { section { padding: 7rem 3rem; } }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.2s !important;
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-      .hero-name, .hero-eyebrow, .hero-subtitle, .scroll-indicator { opacity: 1 !important; }
-    }
-  </style>
-</head>
-<body>
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
+      body {
+        background: var(--cream);
+        color: var(--text);
+        font-family: var(--ff-body);
+        font-weight: 300;
+        overflow-x: hidden;
+        min-height: 100dvh;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      a {
+        color: inherit;
+      }
 
-<section id="hero">
-  <div id="hero-bg" aria-hidden="true"></div>
-  <div id="petal-canvas" aria-hidden="true"></div>
-  <div class="hero-content">
-    <span class="hero-eyebrow">Il tuo regalo</span>
-    <h1 class="hero-name">Patricia</h1>
-    <p class="hero-subtitle">QC Terme &middot; San Pellegrino Terme</p>
-  </div>
-  <div class="scroll-indicator" aria-hidden="true">
-    <span>Scorri</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</section>
-
-<div class="divider-wrap" aria-hidden="true">
-  <svg class="botanical-divider" viewBox="0 0 600 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <line x1="0" y1="30" x2="240" y2="30" stroke="#C9962A" stroke-width="0.8" stroke-opacity="0.4"/>
-    <line x1="360" y1="30" x2="600" y2="30" stroke="#C9962A" stroke-width="0.8" stroke-opacity="0.4"/>
-    <circle cx="300" cy="30" r="6" fill="none" stroke="#C9962A" stroke-width="1" stroke-opacity="0.7"/>
-    <circle cx="300" cy="30" r="2" fill="#C9962A" fill-opacity="0.5"/>
-    <ellipse cx="300" cy="17" rx="3.5" ry="7" fill="#C9962A" fill-opacity="0.3"/>
-    <ellipse cx="300" cy="17" rx="3.5" ry="7" fill="#C9962A" fill-opacity="0.22" transform="rotate(45 300 30)"/>
-    <ellipse cx="300" cy="17" rx="3.5" ry="7" fill="#C9962A" fill-opacity="0.22" transform="rotate(90 300 30)"/>
-    <ellipse cx="300" cy="17" rx="3.5" ry="7" fill="#C9962A" fill-opacity="0.18" transform="rotate(135 300 30)"/>
-    <path d="M240 30 Q260 20 265 30 Q260 40 240 30Z" fill="#7A9E7E" fill-opacity="0.35"/>
-    <path d="M360 30 Q340 20 335 30 Q340 40 360 30Z" fill="#7A9E7E" fill-opacity="0.35"/>
-    <circle cx="200" cy="30" r="2" fill="#C9962A" fill-opacity="0.3"/>
-    <circle cx="400" cy="30" r="2" fill="#C9962A" fill-opacity="0.3"/>
-  </svg>
-</div>
-
-<section id="message">
-  <div class="section-inner">
-    <span class="section-label sr">Un dono per te</span>
-    <div class="message-card sr sr-delay-1">
-      <p class="message-ornament" aria-hidden="true">&#10022; &#10022; &#10022;</p>
-      <p class="message-text">
-        Con tutto l&apos;amore che proviamo per te,<br />
-        ti invitiamo a vivere un momento di pura bellezza,<br />
-        sospeso nel tempo, dedicato interamente a te.
-      </p>
-      <span class="message-signature">Con amore, Laurent &amp; Dominique</span>
-    </div>
-  </div>
-</section>
-
-<div class="divider-wrap" aria-hidden="true">
-  <svg class="botanical-divider" viewBox="0 0 600 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <line x1="0" y1="30" x2="230" y2="30" stroke="#8B1A2A" stroke-width="0.7" stroke-opacity="0.3"/>
-    <line x1="370" y1="30" x2="600" y2="30" stroke="#8B1A2A" stroke-width="0.7" stroke-opacity="0.3"/>
-    <circle cx="300" cy="30" r="8" fill="none" stroke="#8B1A2A" stroke-width="0.8" stroke-opacity="0.5"/>
-    <path d="M295 30 Q296 24 300 22 Q304 24 305 30 Q304 36 300 38 Q296 36 295 30Z" fill="#F2C4CE" fill-opacity="0.6"/>
-    <line x1="300" y1="38" x2="300" y2="48" stroke="#7A9E7E" stroke-width="0.8" stroke-opacity="0.5"/>
-    <path d="M300 42 Q293 39 290 43" stroke="#7A9E7E" stroke-width="0.7" stroke-opacity="0.45" fill="none"/>
-    <path d="M300 42 Q307 39 310 43" stroke="#7A9E7E" stroke-width="0.7" stroke-opacity="0.45" fill="none"/>
-  </svg>
-</div>
-
-<section id="destination">
-  <div class="section-inner">
-    <span class="section-label sr">La tua destinazione</span>
-    <h2 class="destination-heading sr sr-delay-1">QC Terme</h2>
-    <p class="destination-sub sr sr-delay-2">San Pellegrino Terme, Val Brembana</p>
-    <div class="details-grid">
-      <div class="detail-card sr sr-delay-1">
-        <span class="detail-icon" aria-hidden="true">&#9832;</span>
-        <p class="detail-label">Le Terme</p>
-        <p class="detail-title">Il percorso termale</p>
-        <p class="detail-text">
-          Stucchi, affreschi e vetrate dalla maestosa ricchezza compositiva racchiudono
-          un sognante percorso benessere, tra specchi liquidi, angoli di quiete e
-          infiniti riflessi di luci e colori. La storia del termalismo assume qui
-          una nuova, sorprendente forma.
-        </p>
-      </div>
-      <div class="detail-card sr sr-delay-2">
-        <span class="detail-icon" aria-hidden="true">&#127801;</span>
-        <p class="detail-label">Il riposo</p>
-        <p class="detail-title">Camera Romantica</p>
-        <p class="detail-text">
-          Le camere più spaziose, con una terrazza privata e infiniti comfort
-          tutti per te — una notte avvolta nel silenzio della Val Brembana,
-          curata nei dettagli più raffinati.
-        </p>
-      </div>
-      <div class="detail-card sr sr-delay-3">
-        <span class="detail-icon" aria-hidden="true">&#127869;</span>
-        <p class="detail-label">La tavola</p>
-        <p class="detail-title">Wellness Lunch</p>
-        <p class="detail-text">
-          Una tavola apparecchiata solo per il tuo piacere. Sapori curati,
-          atmosfera soffusa e il tempo dilatato di chi non ha fretta —
-          perché oggi sei tu la protagonista.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider-wrap" aria-hidden="true">
-  <svg class="botanical-divider" viewBox="0 0 600 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <line x1="0" y1="30" x2="600" y2="30" stroke="#C9962A" stroke-width="0.6" stroke-opacity="0.2"/>
-    <circle cx="300" cy="30" r="5" fill="#C9962A" fill-opacity="0.12" stroke="#C9962A" stroke-width="0.8" stroke-opacity="0.35"/>
-    <circle cx="278" cy="30" r="3" fill="#C9962A" fill-opacity="0.1"/>
-    <circle cx="322" cy="30" r="3" fill="#C9962A" fill-opacity="0.1"/>
-    <path d="M238 30 Q244 22 254 28 Q247 35 238 30Z" fill="#7A9E7E" fill-opacity="0.3"/>
-    <path d="M362 30 Q356 22 346 28 Q353 35 362 30Z" fill="#7A9E7E" fill-opacity="0.3"/>
-  </svg>
-</div>
-
-<section id="closing">
-  <div class="closing-inner">
-    <p class="closing-quote sr">
-      Da scegliere insieme,<br />quando il cuore ti dir&#224; il momento giusto.
-    </p>
-    <div class="closing-divider sr sr-delay-1" aria-hidden="true"></div>
-    <span class="closing-signature sr sr-delay-2">Con amore, Laurent &amp; Dominique &#128155;</span>
-    <a href="./index.html" class="back-btn sr sr-delay-3">&#8592; Torna al sito</a>
-  </div>
-</section>
-
-<footer>
-  <img src="./logo-dark.svg" alt="QC Terme" class="footer-logo" />
-  <p class="footer-text">18 Aprile 2025 &middot; Patricia &middot; 70</p>
-</footer>
-
-<script>
-(function() {
-  'use strict';
-  var petalCanvas = document.getElementById('petal-canvas');
-  var PETAL_COLORS = ['#F2C4CE','#e8a0b0','#f5d5dc','#d4829a','#fce4ec'];
-  function createPetal() {
-    var el = document.createElement('div');
-    var size = 10 + Math.random() * 18;
-    el.style.cssText = [
-      'position:absolute',
-      'left:' + (Math.random() * 105 - 2) + '%',
-      'top:-30px',
-      'width:' + size + 'px',
-      'height:' + (size * 0.75) + 'px',
-      'border-radius:50% 0 50% 0',
-      'background:' + PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
-      'opacity:0',
-      'animation:petalFall ' + (8 + Math.random() * 10) + 's ' + (Math.random() * 14) + 's linear infinite',
-      'pointer-events:none',
-      'transform:rotate(' + (Math.random() * 360) + 'deg)'
-    ].join(';');
-    return el;
-  }
-  var count = window.innerWidth < 768 ? 12 : 22;
-  for (var i = 0; i < count; i++) petalCanvas.appendChild(createPetal());
-
-  function initSR() {
-    var els = document.querySelectorAll('.sr');
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function(el) { el.classList.add('visible'); });
-      return;
-    }
-    var obs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          obs.unobserve(entry.target);
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(28px);
         }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    els.forEach(function(el) { obs.observe(el); });
-  }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes shimmerText {
+        0% {
+          background-position: -300% center;
+        }
+        100% {
+          background-position: 300% center;
+        }
+      }
+      @keyframes petalFall {
+        0% {
+          transform: translateY(-40px) rotate(0deg) scale(1);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.8;
+        }
+        90% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg) scale(0.6);
+          opacity: 0;
+        }
+      }
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(8px);
+        }
+      }
 
-  document.addEventListener('DOMContentLoaded', initSR);
-})();
-</script>
-</body>
+      /* HERO */
+      #hero {
+        position: relative;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 5rem 1.5rem 4rem;
+        overflow: hidden;
+      }
+      #hero-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          160deg,
+          #1a0810 0%,
+          var(--burgundy) 50%,
+          #2d1a08 100%
+        );
+        z-index: 0;
+      }
+      #hero-bg::before {
+        content: "";
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 60vw;
+        height: 60vw;
+        max-width: 500px;
+        max-height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(201, 150, 42, 0.12) 0%,
+          transparent 70%
+        );
+      }
+      #hero-bg::after {
+        content: "";
+        position: absolute;
+        bottom: -15%;
+        left: -8%;
+        width: 50vw;
+        height: 50vw;
+        max-width: 420px;
+        max-height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(242, 196, 206, 0.08) 0%,
+          transparent 70%
+        );
+      }
+      #petal-canvas {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero-eyebrow {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: clamp(0.72rem, 2vw, 0.88rem);
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: rgba(201, 150, 42, 0.75);
+        animation: fadeIn 0.8s 0.1s var(--ease-out-expo) both;
+      }
+      .hero-name {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(4rem, 15vw, 8rem);
+        line-height: 0.95;
+        color: var(--cream);
+        animation: fadeIn 0.9s 0.3s var(--ease-out-expo) both;
+        margin: 0.3rem 0;
+      }
+      .hero-subtitle {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        background: linear-gradient(
+          120deg,
+          #b87c22,
+          var(--gold),
+          #f0d060,
+          var(--gold),
+          #b87c22
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation:
+          shimmerText 5s linear infinite,
+          fadeIn 0.9s 0.55s var(--ease-out-expo) both;
+        margin-bottom: 2.5rem;
+      }
+      .scroll-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        opacity: 0;
+        animation: fadeIn 1s 1.2s forwards;
+      }
+      .scroll-indicator span {
+        font-family: var(--ff-body);
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(201, 150, 42, 0.65);
+      }
+      .scroll-arrow {
+        width: 22px;
+        height: 22px;
+        border-right: 2px solid rgba(201, 150, 42, 0.6);
+        border-bottom: 2px solid rgba(201, 150, 42, 0.6);
+        transform: rotate(45deg);
+        animation: scrollBounce 1.6s ease-in-out infinite;
+      }
+
+      /* DIVIDERS */
+      .divider-wrap {
+        text-align: center;
+        padding: 0.5rem 1rem;
+      }
+      .botanical-divider {
+        display: block;
+        margin: 0 auto;
+        max-width: min(600px, 90vw);
+        overflow: visible;
+      }
+
+      /* SECTIONS */
+      section {
+        padding: 5rem 1.5rem;
+      }
+      .section-inner {
+        max-width: 780px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: 0.78rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.8rem;
+        display: block;
+      }
+
+      /* SCROLL REVEAL */
+      .sr {
+        opacity: 0;
+        transform: translateY(32px);
+        transition:
+          opacity 0.75s var(--ease-out-expo),
+          transform 0.75s var(--ease-out-expo);
+      }
+      .sr.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .sr-delay-1 {
+        transition-delay: 0.12s;
+      }
+      .sr-delay-2 {
+        transition-delay: 0.26s;
+      }
+      .sr-delay-3 {
+        transition-delay: 0.42s;
+      }
+
+      /* MESSAGE */
+      #message {
+        background: linear-gradient(160deg, #fff8f0 0%, var(--cream) 100%);
+      }
+      .message-card {
+        background: #fff;
+        border: 1px solid rgba(201, 150, 42, 0.3);
+        border-radius: 20px;
+        padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 3rem);
+        box-shadow:
+          0 8px 48px rgba(139, 26, 42, 0.07),
+          0 2px 8px rgba(201, 150, 42, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      .message-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--burgundy),
+          var(--gold),
+          var(--blush)
+        );
+      }
+      .message-card::after {
+        content: '"';
+        position: absolute;
+        top: -0.2rem;
+        left: 1rem;
+        font-family: var(--ff-heading);
+        font-size: 8rem;
+        color: rgba(201, 150, 42, 0.07);
+        line-height: 1;
+        pointer-events: none;
+      }
+      .message-ornament {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 1.2rem;
+        opacity: 0.5;
+        letter-spacing: 0.5em;
+      }
+      .message-text {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+        line-height: 1.9;
+        color: var(--text);
+        position: relative;
+        z-index: 1;
+      }
+      .message-signature {
+        margin-top: 2rem;
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        display: block;
+        text-align: right;
+        background: linear-gradient(
+          120deg,
+          #b87c22,
+          var(--gold),
+          #f0d060,
+          var(--gold),
+          #b87c22
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmerText 5s linear infinite;
+      }
+
+      /* DESTINATION */
+      #destination {
+        background: linear-gradient(
+          170deg,
+          #fdf1f5 0%,
+          #f5f9f5 50%,
+          #fdf6ec 100%
+        );
+      }
+      .destination-heading {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(2rem, 6vw, 3.2rem);
+        color: var(--burgundy);
+        text-align: center;
+        line-height: 1.1;
+        margin-bottom: 0.3rem;
+      }
+      .destination-sub {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+        color: var(--gold);
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .details-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      @media (min-width: 640px) {
+        .details-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .details-grid .detail-card:last-child:nth-child(odd) {
+          grid-column: 1 / -1;
+          max-width: 500px;
+          margin: 0 auto;
+          width: 100%;
+        }
+      }
+      .detail-card {
+        background: #fff;
+        border: 1px solid rgba(201, 150, 42, 0.2);
+        border-radius: 16px;
+        padding: clamp(1.5rem, 4vw, 2.2rem);
+        box-shadow: 0 4px 24px rgba(139, 26, 42, 0.05);
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.25s var(--ease-out-expo),
+          box-shadow 0.25s;
+      }
+      .detail-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 36px rgba(139, 26, 42, 0.1);
+      }
+      .detail-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--burgundy), var(--gold));
+        opacity: 0.7;
+      }
+      .detail-icon {
+        font-size: 1.6rem;
+        margin-bottom: 0.8rem;
+        display: block;
+      }
+      .detail-label {
+        font-family: var(--ff-body);
+        font-weight: 700;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.5rem;
+      }
+      .detail-title {
+        font-family: var(--ff-heading);
+        font-size: clamp(1.15rem, 3vw, 1.4rem);
+        font-weight: 600;
+        color: var(--burgundy);
+        margin-bottom: 0.7rem;
+      }
+      .detail-text {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(0.95rem, 2.2vw, 1.08rem);
+        line-height: 1.85;
+        color: var(--text);
+        opacity: 0.85;
+      }
+
+      /* CLOSING */
+      #closing {
+        background: linear-gradient(
+          160deg,
+          #1a0810 0%,
+          var(--burgundy) 50%,
+          #2d1a08 100%
+        );
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      #closing::before {
+        content: "";
+        position: absolute;
+        top: -20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70vw;
+        height: 70vw;
+        max-width: 600px;
+        max-height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(201, 150, 42, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .closing-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .closing-quote {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+        color: rgba(253, 246, 236, 0.85);
+        line-height: 1.75;
+        margin-bottom: 2.5rem;
+      }
+      .closing-divider {
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin: 0 auto 2rem;
+      }
+      .closing-signature {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1.15rem, 3.2vw, 1.5rem);
+        background: linear-gradient(
+          120deg,
+          #b87c22,
+          var(--gold),
+          #f5e070,
+          var(--gold),
+          #b87c22
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmerText 4s linear infinite;
+        display: block;
+        margin-bottom: 2.5rem;
+      }
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.8rem;
+        background: transparent;
+        border: 1.5px solid rgba(201, 150, 42, 0.5);
+        border-radius: 40px;
+        color: rgba(253, 246, 236, 0.75);
+        font-family: var(--ff-body);
+        font-size: 0.82rem;
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition:
+          background 0.25s,
+          border-color 0.25s,
+          color 0.25s,
+          transform 0.2s;
+      }
+      .back-btn:hover {
+        background: rgba(201, 150, 42, 0.15);
+        border-color: var(--gold);
+        color: var(--cream);
+        transform: translateY(-2px);
+      }
+
+      /* FOOTER */
+      footer {
+        background: #150810;
+        padding: 2rem 1.5rem;
+        text-align: center;
+      }
+      .footer-logo {
+        width: 110px;
+        margin: 0 auto 1rem;
+        opacity: 0.7;
+        filter: brightness(0) invert(1);
+      }
+      .footer-text {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        color: rgba(253, 246, 236, 0.35);
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 480px) {
+        section {
+          padding: 3.5rem 1.2rem;
+        }
+      }
+      @media (min-width: 768px) {
+        section {
+          padding: 6rem 2.5rem;
+        }
+      }
+      @media (min-width: 1280px) {
+        section {
+          padding: 7rem 3rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.2s !important;
+        }
+        .hero-name,
+        .hero-eyebrow,
+        .hero-subtitle,
+        .scroll-indicator {
+          opacity: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="hero">
+      <div id="hero-bg" aria-hidden="true"></div>
+      <div id="petal-canvas" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span class="hero-eyebrow">Il tuo regalo</span>
+        <h1 class="hero-name">Patricia</h1>
+        <p class="hero-subtitle">QC Terme &middot; San Pellegrino Terme</p>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true">
+        <span>Scorri</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <div class="divider-wrap" aria-hidden="true">
+      <svg
+        class="botanical-divider"
+        viewBox="0 0 600 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0"
+          y1="30"
+          x2="240"
+          y2="30"
+          stroke="#C9962A"
+          stroke-width="0.8"
+          stroke-opacity="0.4"
+        />
+        <line
+          x1="360"
+          y1="30"
+          x2="600"
+          y2="30"
+          stroke="#C9962A"
+          stroke-width="0.8"
+          stroke-opacity="0.4"
+        />
+        <circle
+          cx="300"
+          cy="30"
+          r="6"
+          fill="none"
+          stroke="#C9962A"
+          stroke-width="1"
+          stroke-opacity="0.7"
+        />
+        <circle cx="300" cy="30" r="2" fill="#C9962A" fill-opacity="0.5" />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.3"
+        />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.22"
+          transform="rotate(45 300 30)"
+        />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.22"
+          transform="rotate(90 300 30)"
+        />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.18"
+          transform="rotate(135 300 30)"
+        />
+        <path
+          d="M240 30 Q260 20 265 30 Q260 40 240 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.35"
+        />
+        <path
+          d="M360 30 Q340 20 335 30 Q340 40 360 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.35"
+        />
+        <circle cx="200" cy="30" r="2" fill="#C9962A" fill-opacity="0.3" />
+        <circle cx="400" cy="30" r="2" fill="#C9962A" fill-opacity="0.3" />
+      </svg>
+    </div>
+
+    <section id="message">
+      <div class="section-inner">
+        <span class="section-label sr">Un dono per te</span>
+        <div class="message-card sr sr-delay-1">
+          <p class="message-ornament" aria-hidden="true">
+            &#10022; &#10022; &#10022;
+          </p>
+          <p class="message-text">
+            Con tutto l&apos;amore che proviamo per te,<br />
+            ti invitiamo a vivere un momento di pura bellezza,<br />
+            sospeso nel tempo, dedicato interamente a te.
+          </p>
+          <span class="message-signature"
+            >Con amore, Laurent &amp; Dominique</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-wrap" aria-hidden="true">
+      <svg
+        class="botanical-divider"
+        viewBox="0 0 600 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0"
+          y1="30"
+          x2="230"
+          y2="30"
+          stroke="#8B1A2A"
+          stroke-width="0.7"
+          stroke-opacity="0.3"
+        />
+        <line
+          x1="370"
+          y1="30"
+          x2="600"
+          y2="30"
+          stroke="#8B1A2A"
+          stroke-width="0.7"
+          stroke-opacity="0.3"
+        />
+        <circle
+          cx="300"
+          cy="30"
+          r="8"
+          fill="none"
+          stroke="#8B1A2A"
+          stroke-width="0.8"
+          stroke-opacity="0.5"
+        />
+        <path
+          d="M295 30 Q296 24 300 22 Q304 24 305 30 Q304 36 300 38 Q296 36 295 30Z"
+          fill="#F2C4CE"
+          fill-opacity="0.6"
+        />
+        <line
+          x1="300"
+          y1="38"
+          x2="300"
+          y2="48"
+          stroke="#7A9E7E"
+          stroke-width="0.8"
+          stroke-opacity="0.5"
+        />
+        <path
+          d="M300 42 Q293 39 290 43"
+          stroke="#7A9E7E"
+          stroke-width="0.7"
+          stroke-opacity="0.45"
+          fill="none"
+        />
+        <path
+          d="M300 42 Q307 39 310 43"
+          stroke="#7A9E7E"
+          stroke-width="0.7"
+          stroke-opacity="0.45"
+          fill="none"
+        />
+      </svg>
+    </div>
+
+    <section id="destination">
+      <div class="section-inner">
+        <span class="section-label sr">La tua destinazione</span>
+        <h2 class="destination-heading sr sr-delay-1">QC Terme</h2>
+        <p class="destination-sub sr sr-delay-2">
+          San Pellegrino Terme, Val Brembana
+        </p>
+        <div class="details-grid">
+          <div class="detail-card sr sr-delay-1">
+            <span class="detail-icon" aria-hidden="true">&#9832;</span>
+            <p class="detail-label">Le Terme</p>
+            <p class="detail-title">Il percorso termale</p>
+            <p class="detail-text">
+              Stucchi, affreschi e vetrate dalla maestosa ricchezza compositiva
+              racchiudono un sognante percorso benessere, tra specchi liquidi,
+              angoli di quiete e infiniti riflessi di luci e colori. La storia
+              del termalismo assume qui una nuova, sorprendente forma.
+            </p>
+          </div>
+          <div class="detail-card sr sr-delay-2">
+            <span class="detail-icon" aria-hidden="true">&#127801;</span>
+            <p class="detail-label">Il riposo</p>
+            <p class="detail-title">Camera Romantica</p>
+            <p class="detail-text">
+              Le camere più spaziose, con una terrazza privata e infiniti
+              comfort tutti per te — una notte avvolta nel silenzio della Val
+              Brembana, curata nei dettagli più raffinati.
+            </p>
+          </div>
+          <div class="detail-card sr sr-delay-3">
+            <span class="detail-icon" aria-hidden="true">&#127869;</span>
+            <p class="detail-label">La tavola</p>
+            <p class="detail-title">Wellness Lunch</p>
+            <p class="detail-text">
+              Una tavola apparecchiata solo per il tuo piacere. Sapori curati,
+              atmosfera soffusa e il tempo dilatato di chi non ha fretta —
+              perché oggi sei tu la protagonista.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-wrap" aria-hidden="true">
+      <svg
+        class="botanical-divider"
+        viewBox="0 0 600 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0"
+          y1="30"
+          x2="600"
+          y2="30"
+          stroke="#C9962A"
+          stroke-width="0.6"
+          stroke-opacity="0.2"
+        />
+        <circle
+          cx="300"
+          cy="30"
+          r="5"
+          fill="#C9962A"
+          fill-opacity="0.12"
+          stroke="#C9962A"
+          stroke-width="0.8"
+          stroke-opacity="0.35"
+        />
+        <circle cx="278" cy="30" r="3" fill="#C9962A" fill-opacity="0.1" />
+        <circle cx="322" cy="30" r="3" fill="#C9962A" fill-opacity="0.1" />
+        <path
+          d="M238 30 Q244 22 254 28 Q247 35 238 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.3"
+        />
+        <path
+          d="M362 30 Q356 22 346 28 Q353 35 362 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.3"
+        />
+      </svg>
+    </div>
+
+    <section id="closing">
+      <div class="closing-inner">
+        <p class="closing-quote sr">
+          Da scegliere insieme,<br />quando il cuore ti dir&#224; il momento
+          giusto.
+        </p>
+        <div class="closing-divider sr sr-delay-1" aria-hidden="true"></div>
+        <span class="closing-signature sr sr-delay-2"
+          >Con amore, Laurent &amp; Dominique &#128155;</span
+        >
+        <a
+          href="./index.html"
+          class="back-btn sr sr-delay-3"
+          onclick="
+            if (window.parent !== window) {
+              event.preventDefault();
+              window.parent.closeTicket();
+            }
+          "
+          >&#8592; Torna al sito</a
+        >
+      </div>
+    </section>
+
+    <footer>
+      <img src="./logo-dark.svg" alt="QC Terme" class="footer-logo" />
+      <p class="footer-text">18 Aprile 2025 &middot; Patricia &middot; 70</p>
+    </footer>
+
+    <script>
+      (function () {
+        "use strict";
+        var petalCanvas = document.getElementById("petal-canvas");
+        var PETAL_COLORS = [
+          "#F2C4CE",
+          "#e8a0b0",
+          "#f5d5dc",
+          "#d4829a",
+          "#fce4ec",
+        ];
+        function createPetal() {
+          var el = document.createElement("div");
+          var size = 10 + Math.random() * 18;
+          el.style.cssText = [
+            "position:absolute",
+            "left:" + (Math.random() * 105 - 2) + "%",
+            "top:-30px",
+            "width:" + size + "px",
+            "height:" + size * 0.75 + "px",
+            "border-radius:50% 0 50% 0",
+            "background:" +
+              PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+            "opacity:0",
+            "animation:petalFall " +
+              (8 + Math.random() * 10) +
+              "s " +
+              Math.random() * 14 +
+              "s linear infinite",
+            "pointer-events:none",
+            "transform:rotate(" + Math.random() * 360 + "deg)",
+          ].join(";");
+          return el;
+        }
+        var count = window.innerWidth < 768 ? 12 : 22;
+        for (var i = 0; i < count; i++) petalCanvas.appendChild(createPetal());
+
+        function initSR() {
+          var els = document.querySelectorAll(".sr");
+          if (!("IntersectionObserver" in window)) {
+            els.forEach(function (el) {
+              el.classList.add("visible");
+            });
+            return;
+          }
+          var obs = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("visible");
+                  obs.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+          );
+          els.forEach(function (el) {
+            obs.observe(el);
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", initSR);
+      })();
+    </script>
+  </body>
 </html>
