@@ -1906,7 +1906,7 @@
         };
 
         /* ── STATE ───────────────────────────────── */
-        let currentLang = sessionStorage.getItem("lang") || null;
+        let currentLang = null;
         let cluesUnlocked = 1;
 
         /* ── APPLY TRANSLATIONS ──────────────────── */
@@ -2284,14 +2284,6 @@
           initHeroPetals();
           initScrollReveal();
           initMusicPlayer();
-
-          if (currentLang) {
-            // Already chose language in this session
-            applyLang(currentLang);
-            const gate = document.getElementById("lang-gate");
-            gate.style.display = "none";
-            document.getElementById("lang-toggle").classList.add("visible");
-          }
         }
 
         document.addEventListener("DOMContentLoaded", init);
