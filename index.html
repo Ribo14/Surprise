@@ -1104,6 +1104,67 @@
       }
 
       /* ─────────────────────────────────────────
+       MUSIC PLAYER
+    ───────────────────────────────────────── */
+      #music-player {
+        position: fixed;
+        bottom: 1.4rem;
+        left: 1.4rem;
+        z-index: 8000;
+        display: none;
+      }
+      #music-player.visible {
+        display: block;
+      }
+      #music-toggle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(253, 246, 236, 0.92);
+        border: 1.5px solid rgba(201, 150, 42, 0.45);
+        color: var(--gold);
+        font-size: 1.15rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.2s var(--ease-out-expo),
+          box-shadow 0.2s,
+          background 0.2s;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+      }
+      #music-toggle:hover,
+      #music-toggle:focus-visible {
+        transform: scale(1.1);
+        box-shadow: 0 6px 22px rgba(201, 150, 42, 0.3);
+        background: rgba(253, 246, 236, 1);
+        outline: none;
+      }
+      #music-toggle .note-icon {
+        display: inline-block;
+        transition: opacity 0.2s;
+      }
+      #music-toggle.muted .note-icon {
+        opacity: 0.35;
+      }
+      @keyframes noteBounce {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-8deg);
+        }
+        50% {
+          transform: translateY(-3px) rotate(8deg);
+        }
+      }
+      #music-toggle:not(.muted) .note-icon {
+        animation: noteBounce 1.8s ease-in-out infinite;
+      }
+
+      /* ─────────────────────────────────────────
        CONFETTI CANVAS
     ───────────────────────────────────────── */
       #confetti-canvas {
@@ -1286,6 +1347,19 @@
       <span class="toggle-flag" id="toggle-flag-icon">🇫🇷</span>
       <span class="toggle-label" id="toggle-flag-label">FR</span>
     </button>
+
+    <!-- Music player -->
+    <div id="music-player" aria-label="Lettore musicale">
+      <audio id="bg-audio" src="./music.mp3" loop preload="auto"></audio>
+      <button
+        id="music-toggle"
+        class="muted"
+        onclick="toggleMusic()"
+        aria-label="Attiva musica"
+      >
+        <span class="note-icon" aria-hidden="true">♪</span>
+      </button>
+    </div>
 
     <!-- Confetti canvas -->
     <canvas id="confetti-canvas" aria-hidden="true"></canvas>
@@ -2167,11 +2241,43 @@
           els.forEach((el) => obs.observe(el));
         }
 
+        /* ── MUSIC PLAYER ────────────────────────── */
+        function initMusicPlayer() {
+          const audio = document.getElementById("bg-audio");
+          const btn = document.getElementById("music-toggle");
+          const wrap = document.getElementById("music-player");
+          audio.volume = 0.4;
+          audio.muted = false;
+          // Attempt autoplay immediately (unmuted); browsers may block it —
+          // if blocked, fall back to muted so the button still works.
+          audio.play().catch(() => {
+            audio.muted = true;
+            btn.classList.add("muted");
+            btn.setAttribute("aria-label", "Attiva musica");
+          });
+          btn.classList.remove("muted");
+          btn.setAttribute("aria-label", "Silenzia musica");
+          wrap.classList.add("visible");
+
+          window.toggleMusic = function () {
+            audio.muted = !audio.muted;
+            if (audio.muted) {
+              btn.classList.add("muted");
+              btn.setAttribute("aria-label", "Attiva musica");
+            } else {
+              btn.classList.remove("muted");
+              btn.setAttribute("aria-label", "Silenzia musica");
+              if (audio.paused) audio.play().catch(() => {});
+            }
+          };
+        }
+
         /* ── INIT ─────────────────────────────────── */
         function init() {
           initGatePetals();
           initHeroPetals();
           initScrollReveal();
+          initMusicPlayer();
 
           if (currentLang) {
             // Already chose language in this session
