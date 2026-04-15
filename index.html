@@ -2247,16 +2247,9 @@
           const btn = document.getElementById("music-toggle");
           const wrap = document.getElementById("music-player");
           audio.volume = 0.4;
-          audio.muted = false;
-          // Attempt autoplay immediately (unmuted); browsers may block it —
-          // if blocked, fall back to muted so the button still works.
-          audio.play().catch(() => {
-            audio.muted = true;
-            btn.classList.add("muted");
-            btn.setAttribute("aria-label", "Attiva musica");
-          });
-          btn.classList.remove("muted");
-          btn.setAttribute("aria-label", "Silenzia musica");
+          audio.muted = true;
+          // Attempt autoplay; show player regardless
+          audio.play().catch(() => {});
           wrap.classList.add("visible");
 
           window.toggleMusic = function () {
@@ -2267,6 +2260,7 @@
             } else {
               btn.classList.remove("muted");
               btn.setAttribute("aria-label", "Silenzia musica");
+              // Resume if paused (browsers may have blocked autoplay)
               if (audio.paused) audio.play().catch(() => {});
             }
           };
