@@ -2007,6 +2007,22 @@
 
         /* ── SELECT LANGUAGE (from gate) ────────── */
         window.selectLanguage = function (lang) {
+          // ⚠️ audio.play() MUST be the very first call — Chrome revokes the
+          // "user gesture token" after any requestAnimationFrame (used by confetti),
+          // so if we call play() later in this function it gets silently blocked.
+          const audio = document.getElementById("bg-audio");
+          const btn = document.getElementById("music-toggle");
+          audio.muted = false;
+          audio
+            .play()
+            .then(() => {
+              btn.classList.remove("muted");
+              btn.setAttribute("aria-label", "Silenzia musica");
+            })
+            .catch(() => {
+              // Browser blocked even with gesture — leave button muted
+            });
+
           currentLang = lang;
           sessionStorage.setItem("lang", lang);
           applyLang(lang);
@@ -2355,10 +2371,10 @@
           const btn = document.getElementById("music-toggle");
           const wrap = document.getElementById("music-player");
           audio.volume = 0.4;
-          audio.muted = false;
-          // Button starts in normal (unmuted) state; music plays on first click.
-          btn.classList.remove("muted");
-          btn.setAttribute("aria-label", "Silenzia musica");
+          // Keep audio paused and button in muted state until user clicks a language.
+          // This is the honest initial state.
+          btn.classList.add("muted");
+          btn.setAttribute("aria-label", "Attiva musica");
           wrap.classList.add("visible");
 
           window.toggleMusic = function () {
