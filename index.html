@@ -1,0 +1,2189 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patricia · 70 anni di meraviglia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ─────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────── */
+      :root {
+        --burgundy: #8b1a2a;
+        --gold: #c9962a;
+        --gold-light: #e8b840;
+        --blush: #f2c4ce;
+        --cream: #fdf6ec;
+        --green: #7a9e7e;
+        --text: #3a2a1a;
+
+        --ff-heading: "Cormorant Garamond", Georgia, serif;
+        --ff-body: "Lato", system-ui, sans-serif;
+
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* ─────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
+
+      body {
+        background: var(--cream);
+        color: var(--text);
+        font-family: var(--ff-body);
+        font-weight: 300;
+        overflow-x: hidden;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      button {
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-family: inherit;
+      }
+
+      /* ─────────────────────────────────────────
+       KEYFRAMES
+    ───────────────────────────────────────── */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.88);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes float1 {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        33% {
+          transform: translateY(-28px) rotate(8deg);
+        }
+        66% {
+          transform: translateY(-14px) rotate(-5deg);
+        }
+      }
+      @keyframes float2 {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-22px) rotate(-10deg);
+        }
+      }
+      @keyframes float3 {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        40% {
+          transform: translateY(-18px) rotate(6deg);
+        }
+        80% {
+          transform: translateY(-30px) rotate(-4deg);
+        }
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: -200% center;
+        }
+        100% {
+          background-position: 200% center;
+        }
+      }
+      @keyframes pulseGlow {
+        0%,
+        100% {
+          text-shadow:
+            0 0 20px rgba(201, 150, 42, 0.4),
+            0 0 40px rgba(201, 150, 42, 0.2);
+        }
+        50% {
+          text-shadow:
+            0 0 30px rgba(201, 150, 42, 0.7),
+            0 0 60px rgba(201, 150, 42, 0.35);
+        }
+      }
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(8px);
+        }
+      }
+      @keyframes rotate {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes revealSlide {
+        from {
+          opacity: 0;
+          transform: translateY(40px) scaleY(0.95);
+          transform-origin: top;
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scaleY(1);
+        }
+      }
+      @keyframes overlayIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes revealCard {
+        from {
+          opacity: 0;
+          transform: scale(0.82) translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      @keyframes shimmerText {
+        0% {
+          background-position: -300% center;
+        }
+        100% {
+          background-position: 300% center;
+        }
+      }
+      @keyframes petalFall {
+        0% {
+          transform: translateY(-40px) rotate(0deg) scale(1);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg) scale(0.6);
+          opacity: 0;
+        }
+      }
+      @keyframes langBtnHover {
+        0% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-4px) scale(1.03);
+        }
+        100% {
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes candleFlicker {
+        0%,
+        100% {
+          transform: scaleX(1) scaleY(1);
+          opacity: 1;
+        }
+        25% {
+          transform: scaleX(0.85) scaleY(1.15);
+          opacity: 0.9;
+        }
+        50% {
+          transform: scaleX(1.1) scaleY(0.9);
+          opacity: 1;
+        }
+        75% {
+          transform: scaleX(0.9) scaleY(1.1);
+          opacity: 0.85;
+        }
+      }
+      @keyframes starPop {
+        0% {
+          transform: scale(0) rotate(-30deg);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.2) rotate(5deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1) rotate(0deg);
+          opacity: 1;
+        }
+      }
+
+      /* ─────────────────────────────────────────
+       LANGUAGE GATE (full-screen overlay)
+    ───────────────────────────────────────── */
+      #lang-gate {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: linear-gradient(
+          145deg,
+          #1a0810 0%,
+          var(--burgundy) 45%,
+          #2d1a08 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        padding: 2rem;
+        transition:
+          opacity 0.7s var(--ease-smooth),
+          visibility 0.7s;
+      }
+      #lang-gate.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #lang-gate .gate-title {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(2rem, 7vw, 3.5rem);
+        color: var(--cream);
+        text-align: center;
+        letter-spacing: 0.04em;
+        animation: fadeIn 0.8s var(--ease-out-expo) both;
+      }
+      #lang-gate .gate-subtitle {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+        color: rgba(253, 246, 236, 0.65);
+        text-align: center;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        animation: fadeIn 0.8s 0.2s var(--ease-out-expo) both;
+      }
+      .lang-btns {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeIn 0.9s 0.4s var(--ease-out-expo) both;
+      }
+      .lang-btn {
+        position: relative;
+        background: rgba(253, 246, 236, 0.08);
+        border: 1.5px solid rgba(201, 150, 42, 0.55);
+        border-radius: 16px;
+        padding: 1.4rem 2.8rem;
+        color: var(--cream);
+        font-family: var(--ff-heading);
+        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        backdrop-filter: blur(12px);
+        transition:
+          background 0.3s,
+          border-color 0.3s,
+          transform 0.25s var(--ease-out-expo),
+          box-shadow 0.3s;
+      }
+      .lang-btn:hover,
+      .lang-btn:focus-visible {
+        background: rgba(201, 150, 42, 0.18);
+        border-color: var(--gold);
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 12px 40px rgba(201, 150, 42, 0.25);
+        outline: none;
+      }
+      .lang-btn .flag {
+        font-size: 1.8em;
+        line-height: 1;
+      }
+      .lang-btn .shimmer-layer {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          105deg,
+          transparent 40%,
+          rgba(255, 255, 255, 0.12) 50%,
+          transparent 60%
+        );
+        background-size: 200%;
+        animation: shimmer 3s infinite;
+        pointer-events: none;
+      }
+      .gate-decoration {
+        width: min(320px, 80vw);
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        opacity: 0.5;
+        animation: fadeIn 0.8s 0.6s both;
+      }
+
+      /* Petal canvas behind gate */
+      #lang-petals {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .gate-petal {
+        position: absolute;
+        width: 18px;
+        height: 14px;
+        border-radius: 50% 0 50% 0;
+        opacity: 0;
+        animation: petalFall linear infinite;
+      }
+
+      /* ─────────────────────────────────────────
+       LANGUAGE TOGGLE (top-right)
+    ───────────────────────────────────────── */
+      #lang-toggle {
+        position: fixed;
+        top: 1.2rem;
+        right: 1.4rem;
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(253, 246, 236, 0.9);
+        border: 1px solid rgba(201, 150, 42, 0.4);
+        border-radius: 32px;
+        padding: 0.45rem 0.9rem;
+        font-size: 0.85rem;
+        font-family: var(--ff-body);
+        font-weight: 400;
+        color: var(--text);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        cursor: pointer;
+      }
+      #lang-toggle.visible {
+        display: flex;
+      }
+      #lang-toggle:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      }
+      #lang-toggle .toggle-flag {
+        font-size: 1.1em;
+      }
+      #lang-toggle .toggle-label {
+        letter-spacing: 0.06em;
+      }
+
+      /* ─────────────────────────────────────────
+       HERO SECTION
+    ───────────────────────────────────────── */
+      #hero {
+        position: relative;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 5rem 1.5rem 4rem;
+        overflow: hidden;
+      }
+      #hero-bg {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          170deg,
+          #f5e8d8 0%,
+          #fdf1f5 40%,
+          #e8f0e9 80%,
+          #f5e8d8 100%
+        );
+        z-index: 0;
+      }
+      /* Parallax decorative circles */
+      #hero-bg::before {
+        content: "";
+        position: absolute;
+        top: -20%;
+        right: -10%;
+        width: 60vw;
+        height: 60vw;
+        max-width: 600px;
+        max-height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(242, 196, 206, 0.35) 0%,
+          transparent 70%
+        );
+      }
+      #hero-bg::after {
+        content: "";
+        position: absolute;
+        bottom: -15%;
+        left: -8%;
+        width: 50vw;
+        height: 50vw;
+        max-width: 500px;
+        max-height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(122, 158, 126, 0.2) 0%,
+          transparent 70%
+        );
+      }
+      #petal-canvas {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero-eyebrow {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: clamp(0.75rem, 2vw, 0.9rem);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--burgundy);
+        opacity: 0;
+        animation: fadeIn 0.8s 0.1s var(--ease-out-expo) forwards;
+      }
+      .hero-name {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(4.5rem, 16vw, 9rem);
+        line-height: 0.95;
+        color: var(--burgundy);
+        letter-spacing: -0.01em;
+        opacity: 0;
+        animation: fadeIn 0.9s 0.3s var(--ease-out-expo) forwards;
+        margin: 0.3rem 0;
+      }
+      .hero-subtitle {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+        color: var(--gold);
+        letter-spacing: 0.06em;
+        opacity: 0;
+        animation:
+          fadeIn 0.9s 0.55s var(--ease-out-expo) forwards,
+          pulseGlow 3s 1.5s ease-in-out infinite;
+        margin-bottom: 2.5rem;
+      }
+
+      /* Golden 70 */
+      .hero-70 {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 600;
+        font-size: clamp(5rem, 18vw, 10rem);
+        line-height: 1;
+        background: linear-gradient(
+          135deg,
+          #b87c22 0%,
+          var(--gold) 30%,
+          #f0d060 55%,
+          var(--gold) 75%,
+          #b87c22 100%
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation:
+          shimmerText 4s linear infinite,
+          fadeInScale 1s 0.7s var(--ease-out-expo) both;
+        filter: drop-shadow(0 4px 16px rgba(201, 150, 42, 0.3));
+        margin-bottom: 2rem;
+      }
+      .star-deco {
+        display: inline-block;
+        font-size: 0.4em;
+        vertical-align: super;
+        animation:
+          starPop 0.6s 1.4s var(--ease-out-expo) both,
+          candleFlicker 2s 2s ease-in-out infinite;
+      }
+
+      /* Scroll indicator */
+      .scroll-indicator {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        opacity: 0;
+        animation: fadeIn 1s 1.2s forwards;
+      }
+      .scroll-indicator span {
+        font-family: var(--ff-body);
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      .scroll-arrow {
+        width: 24px;
+        height: 24px;
+        border-right: 2px solid var(--gold);
+        border-bottom: 2px solid var(--gold);
+        transform: rotate(45deg);
+        animation: scrollBounce 1.6s ease-in-out infinite;
+      }
+
+      /* ─────────────────────────────────────────
+       DIVIDERS (botanical SVG)
+    ───────────────────────────────────────── */
+      .divider {
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+        display: block;
+        overflow: visible;
+        padding: 1rem 0;
+      }
+      .divider-wrap {
+        text-align: center;
+        padding: 0.5rem 1rem;
+      }
+
+      /* ─────────────────────────────────────────
+       SECTIONS COMMON
+    ───────────────────────────────────────── */
+      section {
+        padding: 5rem 1.5rem;
+      }
+      .section-inner {
+        max-width: 780px;
+        margin: 0 auto;
+      }
+      .section-label {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: 0.78rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.8rem;
+        display: block;
+      }
+
+      /* ─────────────────────────────────────────
+       MESSAGE SECTION
+    ───────────────────────────────────────── */
+      #message {
+        background: linear-gradient(160deg, #fff8f0 0%, var(--cream) 100%);
+      }
+      .message-card {
+        background: #fff;
+        border: 1px solid rgba(201, 150, 42, 0.3);
+        border-radius: 20px;
+        padding: clamp(2rem, 5vw, 3.5rem) clamp(1.5rem, 5vw, 3rem);
+        box-shadow:
+          0 8px 48px rgba(139, 26, 42, 0.07),
+          0 2px 8px rgba(201, 150, 42, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      .message-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          var(--burgundy),
+          var(--gold),
+          var(--blush)
+        );
+      }
+      .message-card::after {
+        content: '"';
+        position: absolute;
+        top: -0.2rem;
+        left: 1rem;
+        font-family: var(--ff-heading);
+        font-size: 8rem;
+        color: rgba(201, 150, 42, 0.08);
+        line-height: 1;
+        pointer-events: none;
+      }
+      .message-text {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+        line-height: 1.85;
+        color: var(--text);
+        position: relative;
+        z-index: 1;
+      }
+      .message-signature {
+        margin-top: 2rem;
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1rem, 2.5vw, 1.2rem);
+        color: var(--gold);
+        display: block;
+        text-align: right;
+        background: linear-gradient(
+          120deg,
+          #b87c22,
+          var(--gold),
+          #f0d060,
+          var(--gold),
+          #b87c22
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmerText 5s linear infinite;
+      }
+      .message-ornament {
+        text-align: center;
+        margin-bottom: 1.8rem;
+        font-size: 1.4rem;
+        opacity: 0.6;
+        letter-spacing: 0.5em;
+      }
+
+      /* ─────────────────────────────────────────
+       TREASURE HUNT SECTION
+    ───────────────────────────────────────── */
+      #treasure {
+        background: linear-gradient(
+          170deg,
+          #fdf1f5 0%,
+          #f5f9f5 50%,
+          #fdf6ec 100%
+        );
+      }
+      .treasure-heading {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1.8rem, 5vw, 2.6rem);
+        color: var(--burgundy);
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+      .treasure-sub {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        color: var(--text);
+        opacity: 0.65;
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .clues-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .clue-item {
+        position: relative;
+      }
+      /* Connector line between clues */
+      .clue-item:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 28px;
+        top: 60px;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(
+          to bottom,
+          rgba(201, 150, 42, 0.3),
+          rgba(201, 150, 42, 0.08)
+        );
+      }
+      .clue-item.hidden {
+        display: none;
+      }
+      .clue-inner {
+        display: flex;
+        gap: 1.2rem;
+        padding: 1.5rem 0 2.5rem;
+        align-items: flex-start;
+      }
+      .clue-badge {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--burgundy) 0%, #c42638 100%);
+        border: 2px solid rgba(201, 150, 42, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--ff-heading);
+        font-weight: 600;
+        font-size: 1.3rem;
+        color: var(--gold);
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 4px 16px rgba(139, 26, 42, 0.25);
+        flex-direction: column;
+        line-height: 1;
+      }
+      .clue-badge .badge-num {
+        font-size: 1.1rem;
+      }
+      .clue-badge .badge-icon {
+        font-size: 0.65rem;
+        font-style: normal;
+        font-family: var(--ff-body);
+        font-weight: 300;
+        letter-spacing: 0;
+        text-transform: uppercase;
+        color: rgba(201, 150, 42, 0.7);
+      }
+      .clue-body {
+        flex: 1;
+      }
+      .clue-title {
+        font-family: var(--ff-heading);
+        font-size: clamp(1.1rem, 3vw, 1.35rem);
+        font-weight: 600;
+        color: var(--burgundy);
+        margin-bottom: 0.7rem;
+        letter-spacing: 0.02em;
+      }
+      .clue-text {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1rem, 2.5vw, 1.18rem);
+        line-height: 1.9;
+        color: var(--text);
+        margin-bottom: 1.2rem;
+      }
+      .clue-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.5rem;
+        background: transparent;
+        border: 1.5px solid var(--gold);
+        border-radius: 40px;
+        color: var(--gold);
+        font-family: var(--ff-body);
+        font-size: 0.85rem;
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        transition:
+          background 0.25s,
+          color 0.25s,
+          transform 0.2s,
+          box-shadow 0.25s;
+      }
+      .clue-btn:hover,
+      .clue-btn:focus-visible {
+        background: var(--gold);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(201, 150, 42, 0.28);
+        outline: none;
+      }
+      .clue-btn .btn-arrow {
+        transition: transform 0.2s;
+      }
+      .clue-btn:hover .btn-arrow {
+        transform: translateX(3px);
+      }
+
+      .clue-item.revealed .clue-inner {
+        animation: revealSlide 0.65s var(--ease-out-expo) both;
+      }
+
+      /* Gift unlock button */
+      #gift-unlock-wrap {
+        display: none;
+        text-align: center;
+        padding: 2.5rem 0 0.5rem;
+        animation: revealSlide 0.7s var(--ease-out-expo) both;
+      }
+      #gift-unlock-wrap.visible {
+        display: block;
+      }
+      .gift-unlock-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 1.1rem 2.8rem;
+        background: linear-gradient(135deg, var(--burgundy), #c42638);
+        color: var(--cream);
+        font-family: var(--ff-heading);
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        font-style: italic;
+        border-radius: 48px;
+        box-shadow: 0 8px 32px rgba(139, 26, 42, 0.3);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .gift-unlock-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          105deg,
+          transparent 40%,
+          rgba(255, 255, 255, 0.12) 50%,
+          transparent 60%
+        );
+        background-size: 200%;
+        animation: shimmer 3s infinite;
+      }
+      .gift-unlock-btn:hover,
+      .gift-unlock-btn:focus-visible {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 14px 44px rgba(139, 26, 42, 0.38);
+        outline: none;
+      }
+
+      /* ─────────────────────────────────────────
+       GIFT REVEAL OVERLAY
+    ───────────────────────────────────────── */
+      #gift-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 5000;
+        background: linear-gradient(
+          160deg,
+          #1a0810 0%,
+          #2d0f1f 40%,
+          #1a1200 100%
+        );
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1.5rem;
+        overflow-y: auto;
+      }
+      #gift-overlay.active {
+        display: flex;
+        animation: overlayIn 0.6s var(--ease-smooth) both;
+      }
+      .reveal-card {
+        background: rgba(253, 246, 236, 0.07);
+        border: 1px solid rgba(201, 150, 42, 0.35);
+        border-radius: 24px;
+        padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 6vw, 3.5rem);
+        max-width: 680px;
+        width: 100%;
+        text-align: center;
+        backdrop-filter: blur(16px);
+        animation: revealCard 0.9s 0.3s var(--ease-out-expo) both;
+        position: relative;
+        overflow: hidden;
+      }
+      .reveal-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+      }
+      .reveal-pre {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: clamp(0.8rem, 2vw, 0.95rem);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(201, 150, 42, 0.7);
+        margin-bottom: 1rem;
+      }
+      .reveal-headline {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1.3rem, 4vw, 1.8rem);
+        font-weight: 300;
+        color: var(--cream);
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+      }
+      .reveal-destination {
+        font-family: var(--ff-heading);
+        font-weight: 600;
+        font-size: clamp(2rem, 7vw, 4rem);
+        line-height: 1.1;
+        background: linear-gradient(
+          135deg,
+          #b87c22 0%,
+          var(--gold) 30%,
+          #f5e070 55%,
+          var(--gold) 75%,
+          #b87c22 100%
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmerText 3.5s linear infinite;
+        margin-bottom: 0.4rem;
+      }
+      .reveal-destination-sub {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        color: rgba(201, 150, 42, 0.7);
+        margin-bottom: 2rem;
+      }
+      .reveal-divider {
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        margin: 1.5rem auto;
+      }
+      .reveal-desc {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+        line-height: 1.9;
+        color: rgba(253, 246, 236, 0.82);
+      }
+      .reveal-signature {
+        margin-top: 2rem;
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-size: clamp(1rem, 2.8vw, 1.2rem);
+        background: linear-gradient(
+          120deg,
+          #b87c22,
+          var(--gold),
+          #f5e070,
+          var(--gold),
+          #b87c22
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: shimmerText 5s linear infinite;
+        display: block;
+      }
+      .reveal-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+        padding: 0.85rem 2rem;
+        background: var(--gold);
+        color: #2a1a08;
+        font-family: var(--ff-body);
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        border-radius: 40px;
+        text-decoration: none;
+        transition:
+          transform 0.22s,
+          box-shadow 0.22s;
+        box-shadow: 0 6px 24px rgba(201, 150, 42, 0.4);
+      }
+      .reveal-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 32px rgba(201, 150, 42, 0.5);
+      }
+      .close-overlay-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(253, 246, 236, 0.1);
+        border: 1px solid rgba(201, 150, 42, 0.3);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        color: var(--cream);
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+      .close-overlay-btn:hover {
+        background: rgba(201, 150, 42, 0.2);
+      }
+
+      /* Stars deco on overlay */
+      .overlay-stars {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .overlay-star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--gold);
+        opacity: 0;
+        animation: starPop 0.4s forwards;
+      }
+
+      /* ─────────────────────────────────────────
+       CONFETTI CANVAS
+    ───────────────────────────────────────── */
+      #confetti-canvas {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10000;
+      }
+
+      /* ─────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────── */
+      footer {
+        background: var(--burgundy);
+        padding: 3rem 1.5rem;
+        text-align: center;
+      }
+      .footer-logo {
+        width: 120px;
+        margin: 0 auto 1.2rem;
+        opacity: 0.85;
+        filter: brightness(0) invert(1);
+      }
+      .footer-text {
+        font-family: var(--ff-body);
+        font-weight: 300;
+        font-size: 0.78rem;
+        letter-spacing: 0.15em;
+        color: rgba(253, 246, 236, 0.5);
+        text-transform: uppercase;
+      }
+      .footer-heart {
+        color: var(--gold);
+        font-size: 1.2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      /* ─────────────────────────────────────────
+       SCROLL REVEAL UTILITY
+    ───────────────────────────────────────── */
+      .sr {
+        opacity: 0;
+        transform: translateY(32px);
+        transition:
+          opacity 0.75s var(--ease-out-expo),
+          transform 0.75s var(--ease-out-expo);
+      }
+      .sr.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .sr-delay-1 {
+        transition-delay: 0.1s;
+      }
+      .sr-delay-2 {
+        transition-delay: 0.25s;
+      }
+      .sr-delay-3 {
+        transition-delay: 0.4s;
+      }
+
+      /* ─────────────────────────────────────────
+       BOTANICAL DIVIDER SVG inline styles
+    ───────────────────────────────────────── */
+      .botanical-divider {
+        display: block;
+        margin: 0 auto;
+        max-width: min(600px, 90vw);
+        overflow: visible;
+      }
+
+      /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+      @media (max-width: 480px) {
+        section {
+          padding: 3.5rem 1.2rem;
+        }
+        .clue-inner {
+          gap: 0.9rem;
+        }
+        .clue-badge {
+          width: 44px;
+          height: 44px;
+          font-size: 1rem;
+        }
+        .clue-item:not(:last-child)::after {
+          left: 21px;
+        }
+        .lang-btn {
+          padding: 1.2rem 2rem;
+        }
+      }
+      @media (min-width: 768px) {
+        section {
+          padding: 6rem 2.5rem;
+        }
+        .message-card {
+          padding: 3.5rem;
+        }
+      }
+      @media (min-width: 1280px) {
+        section {
+          padding: 7rem 3rem;
+        }
+      }
+
+      /* ─────────────────────────────────────────
+       REDUCED-MOTION FALLBACK
+    ───────────────────────────────────────── */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.2s !important;
+        }
+        .hero-name,
+        .hero-eyebrow,
+        .hero-subtitle,
+        .hero-70,
+        .scroll-indicator,
+        .gate-title,
+        .gate-subtitle,
+        .lang-btns,
+        .gate-decoration {
+          opacity: 1 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ─────────────────────────────────────────
+     LANGUAGE GATE
+───────────────────────────────────────── -->
+    <div
+      id="lang-gate"
+      role="dialog"
+      aria-label="Seleziona la lingua / Choisissez la langue"
+      aria-modal="true"
+    >
+      <div id="lang-petals" aria-hidden="true"></div>
+      <p class="gate-title" id="gate-title-text">Patricia</p>
+      <p class="gate-subtitle">
+        Scegli la tua lingua · Choisissez votre langue
+      </p>
+      <div class="gate-decoration" aria-hidden="true"></div>
+      <div class="lang-btns">
+        <button
+          class="lang-btn"
+          id="btn-it"
+          onclick="selectLanguage('it')"
+          aria-label="Italiano"
+        >
+          <span class="flag" aria-hidden="true">🇮🇹</span>
+          <span>Italiano</span>
+          <span class="shimmer-layer" aria-hidden="true"></span>
+        </button>
+        <button
+          class="lang-btn"
+          id="btn-fr"
+          onclick="selectLanguage('fr')"
+          aria-label="Français"
+        >
+          <span class="flag" aria-hidden="true">🇫🇷</span>
+          <span>Français</span>
+          <span class="shimmer-layer" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Language toggle -->
+    <button
+      id="lang-toggle"
+      onclick="toggleLanguage()"
+      aria-label="Cambia lingua / Changer de langue"
+    >
+      <span class="toggle-flag" id="toggle-flag-icon">🇫🇷</span>
+      <span class="toggle-label" id="toggle-flag-label">FR</span>
+    </button>
+
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+    <!-- ─────────────────────────────────────────
+     HERO
+───────────────────────────────────────── -->
+    <section id="hero" aria-label="Hero">
+      <div id="hero-bg" aria-hidden="true"></div>
+      <div id="petal-canvas" aria-hidden="true"></div>
+      <div class="hero-content">
+        <span class="hero-eyebrow" data-i18n="heroEyebrow">18 Aprile 2025</span>
+        <h1 class="hero-name">Patricia</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">
+          70 anni di meraviglia
+        </p>
+        <div class="hero-70" aria-hidden="true">
+          <span class="star-deco">✦</span>70<span class="star-deco">✦</span>
+        </div>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true">
+        <span data-i18n="scrollHint">Scorri</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <!-- Botanical divider 1 -->
+    <div class="divider-wrap" aria-hidden="true">
+      <svg
+        class="botanical-divider"
+        viewBox="0 0 600 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0"
+          y1="30"
+          x2="240"
+          y2="30"
+          stroke="#C9962A"
+          stroke-width="0.8"
+          stroke-opacity="0.4"
+        />
+        <line
+          x1="360"
+          y1="30"
+          x2="600"
+          y2="30"
+          stroke="#C9962A"
+          stroke-width="0.8"
+          stroke-opacity="0.4"
+        />
+        <!-- Flower center -->
+        <circle
+          cx="300"
+          cy="30"
+          r="6"
+          fill="none"
+          stroke="#C9962A"
+          stroke-width="1"
+          stroke-opacity="0.7"
+        />
+        <circle cx="300" cy="30" r="2" fill="#C9962A" fill-opacity="0.5" />
+        <!-- Petals -->
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.3"
+          transform="rotate(0 300 30)"
+        />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.25"
+          transform="rotate(45 300 30)"
+        />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.25"
+          transform="rotate(90 300 30)"
+        />
+        <ellipse
+          cx="300"
+          cy="17"
+          rx="3.5"
+          ry="7"
+          fill="#C9962A"
+          fill-opacity="0.2"
+          transform="rotate(135 300 30)"
+        />
+        <!-- Leaves left -->
+        <path
+          d="M240 30 Q260 20 265 30 Q260 40 240 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.35"
+        />
+        <path
+          d="M250 30 Q268 23 272 30 Q268 37 250 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.25"
+        />
+        <!-- Leaves right -->
+        <path
+          d="M360 30 Q340 20 335 30 Q340 40 360 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.35"
+        />
+        <path
+          d="M350 30 Q332 23 328 30 Q332 37 350 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.25"
+        />
+        <!-- Side dots -->
+        <circle cx="200" cy="30" r="2" fill="#C9962A" fill-opacity="0.35" />
+        <circle cx="170" cy="30" r="1.5" fill="#C9962A" fill-opacity="0.25" />
+        <circle cx="400" cy="30" r="2" fill="#C9962A" fill-opacity="0.35" />
+        <circle cx="430" cy="30" r="1.5" fill="#C9962A" fill-opacity="0.25" />
+      </svg>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+     MESSAGE SECTION
+───────────────────────────────────────── -->
+    <section id="message">
+      <div class="section-inner">
+        <span class="section-label sr" data-i18n="messageSectionLabel"
+          >Un messaggio speciale</span
+        >
+        <div class="message-card sr sr-delay-1">
+          <p class="message-ornament" aria-hidden="true">✦ ✦ ✦</p>
+          <p class="message-text" data-i18n="messageText">
+            Mamma, ogni anno che passa mi ricorda quanto sei speciale. Hai il
+            cuore più grande del mondo, cammini con il mare ogni mattina, porti
+            gioia ovunque tu vada. Oggi voglio che sia tu a ricevere tutto
+            quell'amore.
+          </p>
+          <span class="message-signature" data-i18n="messageSignature"
+            >Con tutto il mio amore, Laurent</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Botanical divider 2 -->
+    <div class="divider-wrap" aria-hidden="true">
+      <svg
+        class="botanical-divider"
+        viewBox="0 0 600 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0"
+          y1="30"
+          x2="230"
+          y2="30"
+          stroke="#8B1A2A"
+          stroke-width="0.7"
+          stroke-opacity="0.3"
+        />
+        <line
+          x1="370"
+          y1="30"
+          x2="600"
+          y2="30"
+          stroke="#8B1A2A"
+          stroke-width="0.7"
+          stroke-opacity="0.3"
+        />
+        <!-- Rose bud center -->
+        <circle
+          cx="300"
+          cy="30"
+          r="8"
+          fill="none"
+          stroke="#8B1A2A"
+          stroke-width="0.8"
+          stroke-opacity="0.5"
+        />
+        <path
+          d="M295 30 Q296 24 300 22 Q304 24 305 30 Q304 36 300 38 Q296 36 295 30Z"
+          fill="#F2C4CE"
+          fill-opacity="0.6"
+        />
+        <path
+          d="M292 27 Q294 22 300 22 Q300 26 296 28Z"
+          fill="#8B1A2A"
+          fill-opacity="0.2"
+        />
+        <path
+          d="M308 27 Q306 22 300 22 Q300 26 304 28Z"
+          fill="#8B1A2A"
+          fill-opacity="0.2"
+        />
+        <!-- Stem + leaves -->
+        <line
+          x1="300"
+          y1="38"
+          x2="300"
+          y2="48"
+          stroke="#7A9E7E"
+          stroke-width="0.8"
+          stroke-opacity="0.5"
+        />
+        <path
+          d="M300 42 Q293 39 290 43"
+          stroke="#7A9E7E"
+          stroke-width="0.7"
+          stroke-opacity="0.45"
+          fill="none"
+        />
+        <path
+          d="M300 42 Q307 39 310 43"
+          stroke="#7A9E7E"
+          stroke-width="0.7"
+          stroke-opacity="0.45"
+          fill="none"
+        />
+        <!-- Side ornaments -->
+        <circle cx="183" cy="30" r="2" fill="#8B1A2A" fill-opacity="0.25" />
+        <circle cx="160" cy="30" r="1.5" fill="#8B1A2A" fill-opacity="0.2" />
+        <circle cx="417" cy="30" r="2" fill="#8B1A2A" fill-opacity="0.25" />
+        <circle cx="440" cy="30" r="1.5" fill="#8B1A2A" fill-opacity="0.2" />
+      </svg>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+     TREASURE HUNT SECTION
+───────────────────────────────────────── -->
+    <section id="treasure">
+      <div class="section-inner">
+        <h2 class="treasure-heading sr" data-i18n="treasureHeading">
+          Il tuo regalo speciale
+        </h2>
+        <p class="treasure-sub sr sr-delay-1" data-i18n="treasureSub">
+          Segui gli indizi, uno alla volta
+        </p>
+
+        <div class="clues-list" id="clues-list">
+          <!-- CLUE 1 -->
+          <div class="clue-item revealed" id="clue-1" aria-live="polite">
+            <div class="clue-inner">
+              <div class="clue-badge" aria-label="Indizio 1">
+                <span class="badge-num">1</span>
+                <span class="badge-icon" data-i18n="badgeLabel">indizio</span>
+              </div>
+              <div class="clue-body">
+                <p class="clue-title" data-i18n="clue1Title">L'acqua</p>
+                <p class="clue-text" data-i18n="clue1Text">
+                  Ogni mattina i tuoi piedi conoscono un'acqua speciale. Cammini
+                  lungo la riva, il mare ti abbraccia, e il mondo si fa
+                  silenzioso. Ma esiste un'altra acqua — che non scorre verso il
+                  mare. Scorre verso di te.
+                </p>
+                <button
+                  class="clue-btn"
+                  onclick="unlockClue(2)"
+                  data-i18n-btn="clueBtn"
+                >
+                  <span data-i18n="clueBtn">Scopri il prossimo indizio</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLUE 2 -->
+          <div class="clue-item hidden" id="clue-2" aria-live="polite">
+            <div class="clue-inner">
+              <div class="clue-badge" aria-label="Indizio 2">
+                <span class="badge-num">2</span>
+                <span class="badge-icon" data-i18n="badgeLabel">indizio</span>
+              </div>
+              <div class="clue-body">
+                <p class="clue-title" data-i18n="clue2Title">Il movimento</p>
+                <p class="clue-text" data-i18n="clue2Text">
+                  Hai sempre saputo che camminare è una forma d'amore verso te
+                  stessa. Immagina ora di muoverti tra vapori caldi, luci
+                  soffuse e riflessi antichi — dove ogni passo è un regalo.
+                </p>
+                <button
+                  class="clue-btn"
+                  onclick="unlockClue(3)"
+                  data-i18n-btn="clueBtn"
+                >
+                  <span data-i18n="clueBtn">Scopri il prossimo indizio</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLUE 3 -->
+          <div class="clue-item hidden" id="clue-3" aria-live="polite">
+            <div class="clue-inner">
+              <div class="clue-badge" aria-label="Indizio 3">
+                <span class="badge-num">3</span>
+                <span class="badge-icon" data-i18n="badgeLabel">indizio</span>
+              </div>
+              <div class="clue-body">
+                <p class="clue-title" data-i18n="clue3Title">La tavola</p>
+                <p class="clue-text" data-i18n="clue3Text">
+                  Sai meglio di chiunque altro che il cibo è gioia condivisa, è
+                  cura, è casa. Questa volta qualcuno ha pensato a te — una
+                  tavola apparecchiata solo per il tuo piacere.
+                </p>
+                <button
+                  class="clue-btn"
+                  onclick="unlockClue(4)"
+                  data-i18n-btn="clueBtn"
+                >
+                  <span data-i18n="clueBtn">Scopri il prossimo indizio</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CLUE 4 -->
+          <div class="clue-item hidden" id="clue-4" aria-live="polite">
+            <div class="clue-inner">
+              <div class="clue-badge" aria-label="Indizio 4">
+                <span class="badge-num">4</span>
+                <span class="badge-icon" data-i18n="badgeLabel">indizio</span>
+              </div>
+              <div class="clue-body">
+                <p class="clue-title" data-i18n="clue4Title">Il riposo</p>
+                <p class="clue-text" data-i18n="clue4Text">
+                  Hai dato tanto. Ai tuoi figli, agli altri, alla vita. Ora è il
+                  momento di ricevere. Di lasciarti coccolare. Di non fare nulla
+                  — e scoprire che anche questo è una forma di forza.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /clues-list -->
+
+        <!-- Gift CTA (shows after clue 4) -->
+        <div id="gift-unlock-wrap">
+          <button
+            class="gift-unlock-btn"
+            onclick="openGiftReveal()"
+            data-i18n-btn="giftBtn"
+          >
+            <span aria-hidden="true">🎁</span>
+            <span data-i18n="giftBtn">Apri il tuo regalo</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Botanical divider 3 -->
+    <div class="divider-wrap" aria-hidden="true">
+      <svg
+        class="botanical-divider"
+        viewBox="0 0 600 60"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <line
+          x1="0"
+          y1="30"
+          x2="600"
+          y2="30"
+          stroke="#C9962A"
+          stroke-width="0.6"
+          stroke-opacity="0.2"
+        />
+        <circle
+          cx="300"
+          cy="30"
+          r="5"
+          fill="#C9962A"
+          fill-opacity="0.15"
+          stroke="#C9962A"
+          stroke-width="0.8"
+          stroke-opacity="0.4"
+        />
+        <circle cx="280" cy="30" r="3" fill="#C9962A" fill-opacity="0.1" />
+        <circle cx="320" cy="30" r="3" fill="#C9962A" fill-opacity="0.1" />
+        <circle cx="260" cy="30" r="2" fill="#C9962A" fill-opacity="0.15" />
+        <circle cx="340" cy="30" r="2" fill="#C9962A" fill-opacity="0.15" />
+        <path
+          d="M240 30 Q245 22 255 28 Q248 35 240 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.3"
+        />
+        <path
+          d="M360 30 Q355 22 345 28 Q352 35 360 30Z"
+          fill="#7A9E7E"
+          fill-opacity="0.3"
+        />
+      </svg>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+     GIFT REVEAL OVERLAY
+───────────────────────────────────────── -->
+    <div
+      id="gift-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reveal-destination"
+    >
+      <div class="overlay-stars" id="overlay-stars" aria-hidden="true"></div>
+      <button
+        class="close-overlay-btn"
+        onclick="closeGiftReveal()"
+        aria-label="Chiudi"
+      >
+        ✕
+      </button>
+      <div class="reveal-card">
+        <p class="reveal-pre" data-i18n="revealPre">Il tuo regalo è...</p>
+        <p class="reveal-headline" data-i18n="revealHeadline">
+          Benvenuta in un mondo pensato solo per te
+        </p>
+        <div class="reveal-divider" aria-hidden="true"></div>
+        <p class="reveal-destination" id="reveal-destination">QC Terme</p>
+        <p class="reveal-destination-sub">San Pellegrino Terme</p>
+        <div class="reveal-divider" aria-hidden="true"></div>
+        <p class="reveal-desc" data-i18n="revealDesc">
+          Un'esperienza completa di benessere: il percorso termale, una Camera
+          Romantica con terrazza privata, e un Wellness Lunch — tutto dedicato a
+          te, da vivere quando il cuore ti dirà il momento giusto.
+        </p>
+        <a
+          href="./biglietto_patricia.html"
+          class="reveal-cta"
+          data-i18n="revealCta"
+        >
+          Scopri tutti i dettagli →
+        </a>
+        <span class="reveal-signature" data-i18n="revealSignature"
+          >Con tutto il mio amore, Laurent 💛</span
+        >
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────
+     FOOTER
+───────────────────────────────────────── -->
+    <footer>
+      <span class="footer-heart" aria-hidden="true">♥</span>
+      <p class="footer-text" data-i18n="footerText">
+        18 Aprile 2025 · Patricia · 70
+      </p>
+    </footer>
+
+    <!-- ─────────────────────────────────────────
+     JAVASCRIPT
+───────────────────────────────────────── -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ── TRANSLATIONS ────────────────────────── */
+        const T = {
+          it: {
+            heroEyebrow: "18 Aprile 2025",
+            heroSubtitle: "70 anni di meraviglia",
+            scrollHint: "Scorri",
+            messageSectionLabel: "Un messaggio speciale",
+            messageText:
+              "Mamma, ogni anno che passa mi ricorda quanto sei speciale. Hai il cuore più grande del mondo, cammini con il mare ogni mattina, porti gioia ovunque tu vada. Oggi voglio che sia tu a ricevere tutto quell'amore.",
+            messageSignature: "Con tutto il mio amore, Laurent",
+            treasureHeading: "Il tuo regalo speciale",
+            treasureSub: "Segui gli indizi, uno alla volta",
+            badgeLabel: "indizio",
+            clue1Title: "L'acqua",
+            clue1Text:
+              "Ogni mattina i tuoi piedi conoscono un'acqua speciale. Cammini lungo la riva, il mare ti abbraccia, e il mondo si fa silenzioso. Ma esiste un'altra acqua — che non scorre verso il mare. Scorre verso di te.",
+            clue2Title: "Il movimento",
+            clue2Text:
+              "Hai sempre saputo che camminare è una forma d'amore verso te stessa. Immagina ora di muoverti tra vapori caldi, luci soffuse e riflessi antichi — dove ogni passo è un regalo.",
+            clue3Title: "La tavola",
+            clue3Text:
+              "Sai meglio di chiunque altro che il cibo è gioia condivisa, è cura, è casa. Questa volta qualcuno ha pensato a te — una tavola apparecchiata solo per il tuo piacere.",
+            clue4Title: "Il riposo",
+            clue4Text:
+              "Hai dato tanto. Ai tuoi figli, agli altri, alla vita. Ora è il momento di ricevere. Di lasciarti coccolare. Di non fare nulla — e scoprire che anche questo è una forma di forza.",
+            clueBtn: "Scopri il prossimo indizio",
+            giftBtn: "Apri il tuo regalo",
+            revealPre: "Il tuo regalo è...",
+            revealHeadline: "Benvenuta in un mondo pensato solo per te",
+            revealDesc:
+              "Un'esperienza completa di benessere: il percorso termale, una Camera Romantica con terrazza privata, e un Wellness Lunch — tutto dedicato a te, da vivere quando il cuore ti dirà il momento giusto.",
+            revealCta: "Scopri tutti i dettagli →",
+            revealSignature: "Con tutto il mio amore, Laurent 💛",
+            footerText: "18 Aprile 2025 · Patricia · 70",
+            toggleLabel: "FR",
+            toggleFlag: "🇫🇷",
+          },
+          fr: {
+            heroEyebrow: "18 Avril 2025",
+            heroSubtitle: "70 ans de merveille",
+            scrollHint: "Défiler",
+            messageSectionLabel: "Un message spécial",
+            messageText:
+              "Maman, chaque année qui passe me rappelle à quel point tu es extraordinaire. Tu as le plus grand cœur du monde, tu marches avec la mer chaque matin, tu portes la joie partout où tu vas. Aujourd'hui, c'est toi qui dois recevoir tout cet amour.",
+            messageSignature: "Avec tout mon amour, Laurent",
+            treasureHeading: "Ton cadeau spécial",
+            treasureSub: "Suis les indices, un à la fois",
+            badgeLabel: "indice",
+            clue1Title: "L'eau",
+            clue1Text:
+              "Chaque matin, tes pieds connaissent une eau particulière. Tu marches le long du rivage, la mer t'enlace, et le monde devient silencieux. Mais il existe une autre eau — qui ne coule pas vers la mer. Elle coule vers toi.",
+            clue2Title: "Le mouvement",
+            clue2Text:
+              "Tu as toujours su que marcher est une forme d'amour envers toi-même. Imagine maintenant de te déplacer parmi des vapeurs chaudes, des lumières douces et des reflets anciens — où chaque pas est un cadeau.",
+            clue3Title: "La table",
+            clue3Text:
+              "Tu sais mieux que quiconque que la nourriture est une joie partagée, c'est du soin, c'est la maison. Cette fois, quelqu'un a pensé à toi — une table dressée uniquement pour ton plaisir.",
+            clue4Title: "Le repos",
+            clue4Text:
+              "Tu as tellement donné. À tes enfants, aux autres, à la vie. Il est maintenant temps de recevoir. De te laisser choyer. De ne rien faire — et de découvrir que c'est aussi une forme de force.",
+            clueBtn: "Découvrir l'indice suivant",
+            giftBtn: "Ouvre ton cadeau",
+            revealPre: "Ton cadeau est...",
+            revealHeadline: "Bienvenue dans un monde pensé rien que pour toi",
+            revealDesc:
+              "Une expérience complète de bien-être : le parcours thermal, une Chambre Romantique avec terrasse privée, et un Wellness Lunch — tout dédié à toi, à vivre quand ton cœur te dira que le moment est venu.",
+            revealCta: "Découvrir tous les détails →",
+            revealSignature: "Avec tout mon amour, Laurent 💛",
+            footerText: "18 Avril 2025 · Patricia · 70",
+            toggleLabel: "IT",
+            toggleFlag: "🇮🇹",
+          },
+        };
+
+        /* ── STATE ───────────────────────────────── */
+        let currentLang = sessionStorage.getItem("lang") || null;
+        let cluesUnlocked = 1;
+
+        /* ── APPLY TRANSLATIONS ──────────────────── */
+        function applyLang(lang) {
+          const t = T[lang];
+          document.documentElement.lang = lang;
+
+          document.querySelectorAll("[data-i18n]").forEach((el) => {
+            const key = el.getAttribute("data-i18n");
+            if (t[key] !== undefined) el.textContent = t[key];
+          });
+
+          // Buttons that contain a span[data-i18n] already handled above.
+          // Update toggle btn appearance
+          const toggle = document.getElementById("lang-toggle");
+          document.getElementById("toggle-flag-icon").textContent =
+            t.toggleFlag;
+          document.getElementById("toggle-flag-label").textContent =
+            t.toggleLabel;
+          toggle.setAttribute(
+            "aria-label",
+            lang === "it" ? "Passa al Français" : "Passa all'Italiano",
+          );
+        }
+
+        /* ── SELECT LANGUAGE (from gate) ────────── */
+        window.selectLanguage = function (lang) {
+          currentLang = lang;
+          sessionStorage.setItem("lang", lang);
+          applyLang(lang);
+
+          // Burst confetti
+          launchConfetti();
+
+          // Hide gate
+          const gate = document.getElementById("lang-gate");
+          gate.classList.add("hidden");
+          setTimeout(() => {
+            gate.style.display = "none";
+          }, 750);
+
+          // Show toggle
+          document.getElementById("lang-toggle").classList.add("visible");
+        };
+
+        /* ── TOGGLE LANGUAGE ─────────────────────── */
+        window.toggleLanguage = function () {
+          const newLang = currentLang === "it" ? "fr" : "it";
+          currentLang = newLang;
+          sessionStorage.setItem("lang", newLang);
+          applyLang(newLang);
+        };
+
+        /* ── CLUE UNLOCK ─────────────────────────── */
+        window.unlockClue = function (n) {
+          if (n > cluesUnlocked + 1) return; // guard
+          cluesUnlocked = n;
+
+          const clueEl = document.getElementById("clue-" + n);
+          if (!clueEl) return;
+
+          // Disable the button that triggered this
+          const prevBtn = document.querySelector(
+            "#clue-" + (n - 1) + " .clue-btn",
+          );
+          if (prevBtn) {
+            prevBtn.disabled = true;
+            prevBtn.style.opacity = "0.4";
+            prevBtn.style.cursor = "default";
+          }
+
+          clueEl.classList.remove("hidden");
+          clueEl.classList.add("revealed");
+
+          launchConfetti();
+
+          // Scroll to newly revealed clue after a short delay
+          setTimeout(() => {
+            clueEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 300);
+
+          // If clue 4 unlocked, show gift button
+          if (n === 4) {
+            setTimeout(() => {
+              const wrap = document.getElementById("gift-unlock-wrap");
+              wrap.classList.add("visible");
+              wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }, 700);
+          }
+        };
+
+        /* ── GIFT REVEAL ─────────────────────────── */
+        window.openGiftReveal = function () {
+          launchConfetti(true);
+          const overlay = document.getElementById("gift-overlay");
+          overlay.classList.add("active");
+          document.body.style.overflow = "hidden";
+          spawnOverlayStars();
+
+          // Focus trap start
+          setTimeout(() => {
+            overlay.querySelector(".close-overlay-btn").focus();
+          }, 600);
+        };
+
+        window.closeGiftReveal = function () {
+          const overlay = document.getElementById("gift-overlay");
+          overlay.classList.remove("active");
+          document.body.style.overflow = "";
+        };
+
+        /* Keyboard close */
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeGiftReveal();
+        });
+
+        /* ── CONFETTI ─────────────────────────────── */
+        const confettiCanvas = document.getElementById("confetti-canvas");
+        const cCtx = confettiCanvas.getContext("2d");
+        let confettiParticles = [];
+        let confettiAnimFrame = null;
+
+        function resizeConfetti() {
+          confettiCanvas.width = window.innerWidth;
+          confettiCanvas.height = window.innerHeight;
+        }
+        resizeConfetti();
+        window.addEventListener("resize", resizeConfetti);
+
+        const CONFETTI_COLORS = [
+          "#C9962A",
+          "#f0d060",
+          "#8B1A2A",
+          "#F2C4CE",
+          "#7A9E7E",
+          "#e8b840",
+          "#fff8ec",
+          "#c42638",
+        ];
+
+        function createConfettiParticle(intense) {
+          const x = Math.random() * confettiCanvas.width;
+          const y = intense ? Math.random() * confettiCanvas.height * 0.4 : -12;
+          const angle = Math.random() * Math.PI * 2;
+          return {
+            x,
+            y,
+            vx: (Math.random() - 0.5) * (intense ? 10 : 5),
+            vy: Math.random() * (intense ? 6 : 4) + 2,
+            size: Math.random() * 8 + 4,
+            color:
+              CONFETTI_COLORS[
+                Math.floor(Math.random() * CONFETTI_COLORS.length)
+              ],
+            angle,
+            spin: (Math.random() - 0.5) * 0.2,
+            shape:
+              Math.random() < 0.4
+                ? "circle"
+                : Math.random() < 0.7
+                  ? "rect"
+                  : "heart",
+            life: 1,
+            decay: Math.random() * 0.008 + 0.006,
+            gravity: 0.12 + Math.random() * 0.08,
+          };
+        }
+
+        function drawHeart(ctx, x, y, size) {
+          ctx.beginPath();
+          ctx.moveTo(x, y + size * 0.3);
+          ctx.bezierCurveTo(
+            x,
+            y,
+            x - size * 0.7,
+            y,
+            x - size * 0.7,
+            y + size * 0.3,
+          );
+          ctx.bezierCurveTo(
+            x - size * 0.7,
+            y + size * 0.6,
+            x,
+            y + size * 0.9,
+            x,
+            y + size,
+          );
+          ctx.bezierCurveTo(
+            x,
+            y + size * 0.9,
+            x + size * 0.7,
+            y + size * 0.6,
+            x + size * 0.7,
+            y + size * 0.3,
+          );
+          ctx.bezierCurveTo(x + size * 0.7, y, x, y, x, y + size * 0.3);
+          ctx.closePath();
+        }
+
+        function animateConfetti() {
+          cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+          confettiParticles = confettiParticles.filter((p) => p.life > 0);
+
+          confettiParticles.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.vx *= 0.99;
+            p.angle += p.spin;
+            p.life -= p.decay;
+
+            cCtx.save();
+            cCtx.globalAlpha = Math.max(0, p.life);
+            cCtx.translate(p.x, p.y);
+            cCtx.rotate(p.angle);
+            cCtx.fillStyle = p.color;
+
+            if (p.shape === "circle") {
+              cCtx.beginPath();
+              cCtx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+              cCtx.fill();
+            } else if (p.shape === "rect") {
+              cCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+            } else {
+              drawHeart(cCtx, -p.size * 0.35, -p.size * 0.5, p.size * 0.7);
+              cCtx.fill();
+            }
+            cCtx.restore();
+          });
+
+          if (confettiParticles.length > 0) {
+            confettiAnimFrame = requestAnimationFrame(animateConfetti);
+          } else {
+            confettiAnimFrame = null;
+          }
+        }
+
+        window.launchConfetti = function (intense) {
+          const count = intense ? 200 : 80;
+          for (let i = 0; i < count; i++) {
+            confettiParticles.push(createConfettiParticle(intense));
+          }
+          if (!confettiAnimFrame) {
+            confettiAnimFrame = requestAnimationFrame(animateConfetti);
+          }
+        };
+
+        /* ── OVERLAY STARS ───────────────────────── */
+        function spawnOverlayStars() {
+          const container = document.getElementById("overlay-stars");
+          container.innerHTML = "";
+          for (let i = 0; i < 60; i++) {
+            const star = document.createElement("div");
+            star.className = "overlay-star";
+            star.style.left = Math.random() * 100 + "%";
+            star.style.top = Math.random() * 100 + "%";
+            star.style.animationDelay = Math.random() * 2 + "s";
+            star.style.width = star.style.height = Math.random() * 3 + 1 + "px";
+            container.appendChild(star);
+          }
+        }
+
+        /* ── ROSE PETALS (hero) ──────────────────── */
+        const petalCanvas = document.getElementById("petal-canvas");
+        const PETAL_COLORS = [
+          "#F2C4CE",
+          "#e8a0b0",
+          "#f5d5dc",
+          "#d4829a",
+          "#fce4ec",
+        ];
+
+        function createHeroPetal() {
+          const el = document.createElement("div");
+          const size = 10 + Math.random() * 18;
+          el.style.cssText = `
+      position: absolute;
+      left: ${Math.random() * 105 - 2}%;
+      top: -30px;
+      width: ${size}px;
+      height: ${size * 0.75}px;
+      border-radius: 50% 0 50% 0;
+      background: ${PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)]};
+      opacity: 0;
+      animation: petalFall ${7 + Math.random() * 10}s ${Math.random() * 12}s linear infinite;
+      pointer-events: none;
+      transform: rotate(${Math.random() * 360}deg);
+    `;
+          return el;
+        }
+
+        function initHeroPetals() {
+          const isMobile = window.innerWidth < 768;
+          const count = isMobile ? 14 : 28;
+          for (let i = 0; i < count; i++) {
+            petalCanvas.appendChild(createHeroPetal());
+          }
+        }
+
+        /* ── GATE PETALS ─────────────────────────── */
+        function initGatePetals() {
+          const container = document.getElementById("lang-petals");
+          const count = 18;
+          for (let i = 0; i < count; i++) {
+            const el = document.createElement("div");
+            el.className = "gate-petal";
+            el.style.backgroundColor =
+              PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)];
+            el.style.left = Math.random() * 100 + "%";
+            el.style.animationDuration = 8 + Math.random() * 10 + "s";
+            el.style.animationDelay = Math.random() * 15 + "s";
+            el.style.width = 10 + Math.random() * 14 + "px";
+            el.style.height = 8 + Math.random() * 10 + "px";
+            container.appendChild(el);
+          }
+        }
+
+        /* ── SCROLL REVEAL ───────────────────────── */
+        function initScrollReveal() {
+          const els = document.querySelectorAll(".sr");
+          if (!("IntersectionObserver" in window)) {
+            els.forEach((el) => el.classList.add("visible"));
+            return;
+          }
+          const obs = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("visible");
+                  obs.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+          );
+          els.forEach((el) => obs.observe(el));
+        }
+
+        /* ── INIT ─────────────────────────────────── */
+        function init() {
+          initGatePetals();
+          initHeroPetals();
+          initScrollReveal();
+
+          if (currentLang) {
+            // Already chose language in this session
+            applyLang(currentLang);
+            const gate = document.getElementById("lang-gate");
+            gate.style.display = "none";
+            document.getElementById("lang-toggle").classList.add("visible");
+          }
+        }
+
+        document.addEventListener("DOMContentLoaded", init);
+      })();
+    </script>
+  </body>
+</html>
