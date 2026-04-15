@@ -1055,6 +1055,8 @@
         letter-spacing: 0.08em;
         border-radius: 40px;
         text-decoration: none;
+        cursor: pointer;
+        border: none;
         transition:
           transform 0.22s,
           box-shadow 0.22s;
@@ -1063,6 +1065,57 @@
       .reveal-cta:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 32px rgba(201, 150, 42, 0.5);
+      }
+
+      /* ─────────────────────────────────────────
+       DETAIL IFRAME OVERLAY
+      ───────────────────────────────────────── */
+      #detail-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 7000;
+        display: flex;
+        flex-direction: column;
+        background: var(--cream);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.45s var(--ease-smooth);
+      }
+      #detail-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #detail-overlay-bar {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0.6rem 1rem;
+        background: var(--burgundy);
+      }
+      #detail-close-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 1.1rem;
+        background: rgba(253, 246, 236, 0.12);
+        border: 1px solid rgba(201, 150, 42, 0.45);
+        border-radius: 32px;
+        color: var(--cream);
+        font-family: var(--ff-body);
+        font-size: 0.78rem;
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      #detail-close-btn:hover {
+        background: rgba(201, 150, 42, 0.2);
+      }
+      #detail-iframe {
+        flex: 1;
+        width: 100%;
+        border: none;
       }
       .close-overlay-btn {
         position: absolute;
@@ -1797,17 +1850,41 @@
           Romantica con terrazza privata, e un Wellness Lunch — tutto dedicato a
           te, da vivere quando il cuore ti dirà il momento giusto.
         </p>
-        <a
-          href="./biglietto_patricia.html"
+        <button
           class="reveal-cta"
+          onclick="openDetailPage()"
           data-i18n="revealCta"
         >
           Scopri tutti i dettagli →
-        </a>
+        </button>
         <span class="reveal-signature" data-i18n="revealSignature"
           >Con tutto il mio amore, Laurent 💛</span
         >
       </div>
+    </div>
+
+    <!-- Detail page iframe overlay -->
+    <div
+      id="detail-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Dettagli regalo"
+    >
+      <div id="detail-overlay-bar">
+        <button
+          id="detail-close-btn"
+          onclick="closeDetailPage()"
+          aria-label="Torna al sito"
+        >
+          ← Torna al sito
+        </button>
+      </div>
+      <iframe
+        id="detail-iframe"
+        title="Dettagli regalo"
+        src=""
+        loading="lazy"
+      ></iframe>
     </div>
 
     <!-- ─────────────────────────────────────────
@@ -2240,6 +2317,26 @@
           );
           els.forEach((el) => obs.observe(el));
         }
+
+        /* ── DETAIL PAGE (iframe overlay) ────────── */
+        window.openDetailPage = function () {
+          const overlay = document.getElementById("detail-overlay");
+          const frame = document.getElementById("detail-iframe");
+          if (!frame.src || frame.src === window.location.href) {
+            frame.src = "./biglietto_patricia.html";
+          }
+          overlay.classList.add("open");
+          document.body.style.overflow = "hidden";
+          setTimeout(() => {
+            document.getElementById("detail-close-btn").focus();
+          }, 300);
+        };
+
+        window.closeDetailPage = function () {
+          const overlay = document.getElementById("detail-overlay");
+          overlay.classList.remove("open");
+          document.body.style.overflow = "";
+        };
 
         /* ── MUSIC PLAYER ────────────────────────── */
         function initMusicPlayer() {
