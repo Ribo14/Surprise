@@ -1163,7 +1163,7 @@
         position: fixed;
         bottom: 1.4rem;
         left: 1.4rem;
-        z-index: 8000;
+        z-index: 10000;
         display: none;
       }
       #music-player.visible {
@@ -1403,7 +1403,14 @@
 
     <!-- Music player -->
     <div id="music-player" aria-label="Lettore musicale">
-      <audio id="bg-audio" src="./music.mp3" loop preload="auto"></audio>
+      <audio
+        id="bg-audio"
+        src="./music.mp3"
+        loop
+        preload="auto"
+        autoplay
+        muted
+      ></audio>
       <button
         id="music-toggle"
         class="muted"
@@ -2354,10 +2361,8 @@
           const btn = document.getElementById("music-toggle");
           const wrap = document.getElementById("music-player");
           audio.volume = 0.4;
-          // Start muted — browsers always allow muted autoplay.
-          // We unmute on the first user gesture (language selection).
-          audio.muted = true;
-          audio.play().catch(() => {}); // start playing silently
+          // Audio already playing muted via HTML autoplay attribute.
+          // We just set up the button state to reflect muted status.
           btn.classList.add("muted");
           btn.setAttribute("aria-label", "Attiva musica");
           wrap.classList.add("visible");
