@@ -2528,18 +2528,17 @@
             })
             .catch(() => {});
 
+          // Set default language (Italian) and show toggle
+          currentLang = "it";
+          applyLang("it");
+          document.getElementById("lang-toggle").classList.add("visible");
+
           // Hide welcome screen
           const welcome = document.getElementById("welcome-screen");
           welcome.classList.add("hidden");
           setTimeout(() => {
             welcome.style.display = "none";
           }, 850);
-
-          // Show language gate
-          const gate = document.getElementById("lang-gate");
-          gate.style.display = "flex";
-          // Force reflow so transition plays
-          gate.getBoundingClientRect();
         };
 
         /* ── INIT ─────────────────────────────────── */
