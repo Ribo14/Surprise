@@ -2007,20 +2007,19 @@
 
         /* ── SELECT LANGUAGE (from gate) ────────── */
         window.selectLanguage = function (lang) {
-          // ⚠️ audio.play() MUST be the very first call — Chrome revokes the
-          // "user gesture token" after any requestAnimationFrame (used by confetti),
-          // so if we call play() later in this function it gets silently blocked.
-          const audio = document.getElementById("bg-audio");
-          const btn = document.getElementById("music-toggle");
+          // Call play() first — Chrome revokes the user gesture token after
+          // any requestAnimationFrame (used by confetti).
+          var audio = document.getElementById("bg-audio");
+          var btn = document.getElementById("music-toggle");
           audio.muted = false;
           audio
             .play()
-            .then(() => {
+            .then(function () {
               btn.classList.remove("muted");
               btn.setAttribute("aria-label", "Silenzia musica");
             })
-            .catch(() => {
-              // Browser blocked even with gesture — leave button muted
+            .catch(function () {
+              // browser blocked — leave muted state
             });
 
           currentLang = lang;
@@ -2031,25 +2030,14 @@
           launchConfetti();
 
           // Hide gate
-          const gate = document.getElementById("lang-gate");
+          var gate = document.getElementById("lang-gate");
           gate.classList.add("hidden");
-          setTimeout(() => {
+          setTimeout(function () {
             gate.style.display = "none";
           }, 750);
 
           // Show toggle
           document.getElementById("lang-toggle").classList.add("visible");
-
-          // Start music — this is inside a user gesture (click) so browsers allow it.
-          const audio = document.getElementById("bg-audio");
-          const btn = document.getElementById("music-toggle");
-          if (audio && audio.paused) {
-            audio.muted = false;
-            audio.play().catch(() => {
-              btn.classList.add("muted");
-              btn.setAttribute("aria-label", "Attiva musica");
-            });
-          }
         };
 
         /* ── TOGGLE LANGUAGE ─────────────────────── */
