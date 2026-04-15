@@ -259,6 +259,131 @@
       }
 
       /* ─────────────────────────────────────────
+       WELCOME SCREEN
+    ───────────────────────────────────────── */
+      #welcome-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background: linear-gradient(
+          145deg,
+          #1a0810 0%,
+          var(--burgundy) 45%,
+          #2d1a08 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2rem;
+        transition:
+          opacity 0.8s var(--ease-smooth),
+          visibility 0.8s;
+      }
+      #welcome-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .welcome-name {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(3rem, 12vw, 6.5rem);
+        color: var(--cream);
+        letter-spacing: 0.04em;
+        animation: fadeIn 1s var(--ease-out-expo) both;
+        line-height: 1;
+      }
+      .welcome-70 {
+        font-family: var(--ff-heading);
+        font-style: italic;
+        font-weight: 600;
+        font-size: clamp(2.5rem, 10vw, 5rem);
+        background: linear-gradient(
+          135deg,
+          #b87c22 0%,
+          var(--gold) 30%,
+          #f0d060 55%,
+          var(--gold) 75%,
+          #b87c22 100%
+        );
+        background-size: 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation:
+          shimmerText 4s linear infinite,
+          fadeIn 1s 0.2s var(--ease-out-expo) both;
+        filter: drop-shadow(0 2px 12px rgba(201, 150, 42, 0.3));
+      }
+      .welcome-decoration {
+        width: min(280px, 70vw);
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        opacity: 0.5;
+        animation: fadeIn 0.8s 0.4s both;
+      }
+      .welcome-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1.1rem 3rem;
+        background: rgba(253, 246, 236, 0.08);
+        border: 1.5px solid rgba(201, 150, 42, 0.6);
+        border-radius: 48px;
+        color: var(--cream);
+        font-family: var(--ff-heading);
+        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+        font-style: italic;
+        font-weight: 300;
+        letter-spacing: 0.08em;
+        backdrop-filter: blur(12px);
+        cursor: pointer;
+        animation: fadeIn 0.9s 0.6s var(--ease-out-expo) both;
+        transition:
+          background 0.3s,
+          border-color 0.3s,
+          transform 0.25s var(--ease-out-expo),
+          box-shadow 0.3s;
+        overflow: hidden;
+      }
+      .welcome-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(
+          105deg,
+          transparent 40%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 60%
+        );
+        background-size: 200%;
+        animation: shimmer 3s infinite;
+        pointer-events: none;
+      }
+      .welcome-btn:hover,
+      .welcome-btn:focus-visible {
+        background: rgba(201, 150, 42, 0.18);
+        border-color: var(--gold);
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 12px 40px rgba(201, 150, 42, 0.28);
+        outline: none;
+      }
+      .welcome-btn .btn-sparkle {
+        font-size: 1em;
+        animation: candleFlicker 2s ease-in-out infinite;
+      }
+
+      /* ─────────────────────────────────────────
        LANGUAGE GATE (full-screen overlay)
     ───────────────────────────────────────── */
       #lang-gate {
@@ -1301,10 +1426,30 @@
   </head>
   <body>
     <!-- ─────────────────────────────────────────
+     WELCOME SCREEN
+───────────────────────────────────────── -->
+    <div
+      id="welcome-screen"
+      role="dialog"
+      aria-label="Benvenuto"
+      aria-modal="true"
+    >
+      <p class="welcome-name">Patricia</p>
+      <p class="welcome-70">✦ 70 ✦</p>
+      <div class="welcome-decoration" aria-hidden="true"></div>
+      <button class="welcome-btn" onclick="enterSite()" aria-label="Entra">
+        <span class="btn-sparkle" aria-hidden="true">♪</span>
+        Entra
+        <span class="btn-sparkle" aria-hidden="true">♪</span>
+      </button>
+    </div>
+
+    <!-- ─────────────────────────────────────────
      LANGUAGE GATE
 ───────────────────────────────────────── -->
     <div
       id="lang-gate"
+      style="display: none"
       role="dialog"
       aria-label="Seleziona la lingua / Choisissez la langue"
       aria-modal="true"
@@ -2248,38 +2393,6 @@
           const btn = document.getElementById("music-toggle");
           audio.volume = 0.4;
 
-          function startPlaying() {
-            audio.muted = false;
-            btn.classList.remove("muted");
-            btn.setAttribute("aria-label", "Silenzia musica");
-            audio.play().catch(() => {});
-          }
-
-          // Try immediate autoplay
-          audio
-            .play()
-            .then(() => {
-              // Autoplay allowed
-              btn.classList.remove("muted");
-              btn.setAttribute("aria-label", "Silenzia musica");
-            })
-            .catch(() => {
-              // Blocked: start on first user interaction
-              btn.classList.add("muted");
-              const unlockEvents = ["click", "touchstart", "keydown"];
-              function onFirstInteraction() {
-                startPlaying();
-                unlockEvents.forEach((ev) =>
-                  document.removeEventListener(ev, onFirstInteraction),
-                );
-              }
-              unlockEvents.forEach((ev) =>
-                document.addEventListener(ev, onFirstInteraction, {
-                  once: true,
-                }),
-              );
-            });
-
           window.toggleMusic = function () {
             if (audio.paused || audio.muted) {
               audio.muted = false;
@@ -2293,6 +2406,34 @@
             }
           };
         }
+
+        /* ── ENTER SITE (welcome screen) ─────────── */
+        window.enterSite = function () {
+          // Start music — guaranteed user gesture
+          const audio = document.getElementById("bg-audio");
+          const btn = document.getElementById("music-toggle");
+          audio.muted = false;
+          audio
+            .play()
+            .then(() => {
+              btn.classList.remove("muted");
+              btn.setAttribute("aria-label", "Silenzia musica");
+            })
+            .catch(() => {});
+
+          // Hide welcome screen
+          const welcome = document.getElementById("welcome-screen");
+          welcome.classList.add("hidden");
+          setTimeout(() => {
+            welcome.style.display = "none";
+          }, 850);
+
+          // Show language gate
+          const gate = document.getElementById("lang-gate");
+          gate.style.display = "flex";
+          // Force reflow so transition plays
+          gate.getBoundingClientRect();
+        };
 
         /* ── INIT ─────────────────────────────────── */
         function init() {
