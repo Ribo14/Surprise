@@ -464,6 +464,17 @@
         max-width: min(480px, 90vw);
         position: relative;
         z-index: 1;
+        animation: photoReveal 1.2s var(--ease-out-expo) 0.4s both;
+      }
+      @keyframes photoReveal {
+        from {
+          opacity: 0;
+          transform: translateY(28px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
       .family-photo-wrap img {
         width: 100%;
@@ -912,7 +923,7 @@
 
     <section id="closing">
       <div class="closing-inner">
-        <div class="family-photo-wrap sr">
+        <div class="family-photo-wrap">
           <img src="./famiglia.jpg" alt="Noi tre insieme" />
           <p class="family-photo-caption">
             Con tutto il nostro amore &#128149;
